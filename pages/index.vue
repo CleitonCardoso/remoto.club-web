@@ -1,6 +1,12 @@
 <template>
   <v-container>
     <v-layout row wrap>
+      <ErrorAlert
+        :notification="notification"
+        :show="snackbar"
+        type="error"
+        @hide="snackbar = !snackbar"
+      ></ErrorAlert>
       <v-flex class="align-start">
         <v-card dark color="black darken-1">
           <v-card-title>
@@ -22,7 +28,7 @@
                   :input-value="selected"
                   close
                   @click="select"
-                  @click:close="remove(item)"
+                  @click:close="removeKeyWords(item)"
                 >
                   <strong>{{ item }}</strong
                   >&nbsp;
@@ -98,16 +104,16 @@
               <v-card-subtitle>{{ job.company }}</v-card-subtitle>
               <v-card-text>
                 <div class="subtitle-1">
-                  Faixa salarial: <strong> R$ {{ job.salary }}</strong>
+                  Nível: <strong>{{ job.experienceRequired }}</strong>
                 </div>
                 <div class="subtitle-1">
-                  Nível: <strong>{{ job.experienceRequired }}</strong>
+                  Faixa salarial: <strong> {{ format(job.salary) }}</strong>
                 </div>
 
                 <div class="my-4">{{ job.description }}</div>
               </v-card-text>
               <v-card-actions>
-                <v-btn dark block grey>
+                <v-btn dark block grey @click="apply">
                   Candatar-se com o LinkedIn
                 </v-btn>
               </v-card-actions>
@@ -126,8 +132,18 @@
   </v-container>
 </template>
 <script>
+import ErrorAlert from '~/components/ErrorAlert'
+
+const brlFormatter = new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: 'BRL',
+  maximumFractionDigits: 2,
+  unitDisplay: 'short',
+})
+
 export default {
   layout: 'search',
+  components: { ErrorAlert },
   data() {
     return {
       expand: false,
@@ -150,6 +166,12 @@ export default {
         { text: 'Sênior', value: 'SENIOR' },
         { text: 'Especialista', value: 'ESPECIALISTA' },
       ],
+      snackbar: false,
+      notification: {
+        title: '',
+        description: '',
+        type: '',
+      },
     }
   },
   mounted() {
@@ -177,11 +199,31 @@ export default {
           this.loading = false
           this.resultSize = res.data.totalPages
         })
-        .catch({})
+        .catch((err) => {
+          let message = 'Houve um erro inesperado.'
+          if (err.response && err.response.status === 400) {
+            message = err.response.data.message
+          }
+
+          this.notification.title = 'Erro'
+          this.notification.description = message
+          this.notification.type = 'error'
+          this.snackbar = true
+        })
     },
-    remove(item) {
+    removeKeyWords(item) {
       this.filter.keyWords.splice(this.filter.keyWords.indexOf(item), 1)
       this.filter.keyWords = [...this.filter.keyWords]
+    },
+    format(value) {
+      return brlFormatter.format(value)
+    },
+    apply() {
+      this.notification.title = 'ATENÇÃO'
+      this.notification.description =
+        'Esta funcionalidade ainda não foi implementada, em breve...'
+      this.notification.type = 'alert'
+      this.snackbar = true
     },
   },
 }

@@ -57,6 +57,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
+            <v-btn dark class="mr-3" to="/my-jobs">Cancelar</v-btn>
             <v-btn dark class="mr-3" @click="save">Salvar</v-btn>
           </v-card-actions>
         </v-card>
@@ -94,11 +95,34 @@ export default {
       notification: {
         title: '',
         description: '',
+        type: '',
       },
     }
   },
-  mounted() {},
+  mounted() {
+    this.loadJob()
+  },
   methods: {
+    loadJob() {
+      const uuid = this.$route.params.uuid
+      if (uuid) {
+        this.$api
+          .get(`private/my-jobs/` + uuid)
+          .then((res) => {
+            this.job = res.data
+          })
+          .catch((err) => {
+            let message = 'Houve um erro inesperado.'
+            if (err.response && err.response.status === 400) {
+              message = err.response.data.message
+            }
+
+            this.notification.title = 'Erro'
+            this.notification.description = message
+            this.snackbar = true
+          })
+      }
+    },
     save() {
       this.$api
         .post(`private/my-jobs`, this.job)

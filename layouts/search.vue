@@ -104,7 +104,7 @@ export default {
   mounted() {
     if (this.$store.getters.isLoggedIn) {
       this.items = [
-        { icon: 'create', text: 'Adicionar uma vaga', to: '/new-job' },
+        { icon: 'create', text: 'Adicionar uma vaga', to: '/job' },
         { icon: 'list', text: 'Ver minhas vagas', to: '/my-jobs' },
         { divider: true },
         { icon: 'mdi-account-circle', text: 'Meu perfil', to: '/my-profile' },

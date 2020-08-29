@@ -70,6 +70,7 @@ export default {
       notification: {
         title: '',
         description: '',
+        type: '',
       },
     }
   },

@@ -68,6 +68,7 @@ export default {
       notification: {
         title: '',
         description: '',
+        type: '',
       },
     }
   },
@@ -88,6 +89,7 @@ export default {
 
           this.notification.title = 'Erro'
           this.notification.description = message
+          this.notification.type = 'error'
           this.snackbar = true
         })
     },

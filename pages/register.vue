@@ -84,16 +84,17 @@ export default {
   components: { ErrorAlert },
   data() {
     return {
-      snackbar: false,
       login: {
         username: '',
         password: '',
         email: '',
         tenant: { companyName: '' },
       },
+      snackbar: false,
       notification: {
         title: '',
         description: '',
+        type: '',
       },
     }
   },
