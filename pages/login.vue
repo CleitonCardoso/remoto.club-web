@@ -2,7 +2,12 @@
   <v-main>
     <v-container class="fill-height" fluid>
       <v-row align="center" justify="center">
-        <v-col cols="12" sm="8" md="4">
+        <ErrorAlert
+          :notification="notification"
+          :show="snackbar"
+          @hide="snackbar = !snackbar"
+        ></ErrorAlert>
+        <v-col xs="12" sm="6" lg="4">
           <v-card class="elevation-12">
             <v-toolbar dark flat>
               <v-toolbar-title>
@@ -42,7 +47,7 @@
               >
               <v-spacer></v-spacer>
               <v-btn dark to="/register">Criar conta</v-btn>
-              <v-btn dark class="mr-3" @click="this.login">Entrar</v-btn>
+              <v-btn dark class="mr-3" @click="login">Entrar</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -52,23 +57,24 @@
 </template>
 
 <script>
+import ErrorAlert from '~/components/ErrorAlert'
+
 const Cookie = process.client ? require('js-cookie') : undefined
 
 export default {
   layout: 'clean',
   middleware: 'not-authenticated',
-  props: {
-    source: String,
-  },
+  components: { ErrorAlert },
   data() {
     return {
+      snackbar: false,
       loginData: {
         username: '',
         password: '',
       },
       notification: {
-        title: '',
-        description: '',
+        title: 'teste',
+        description: 'desc',
       },
       recoverPassEmail: '',
     }
@@ -87,10 +93,19 @@ export default {
             this.notification.title = 'Acesso realizado com sucesso'
             this.$router.push('/')
           })
-          .catch((err) => {
-            this.notification.title = 'Erro. Verifique as suas credenciais'
-            this.cleanFieldsLogin()
-            console.log(err)
+          .catch((e) => {
+            let description = 'Servidor indisponível'
+            if (e.response) {
+              if (e.response.status === 401) {
+                description = 'Usuário inválido'
+              }
+              if (e.response.status === 403) {
+                description = 'Senha inválida'
+              }
+            }
+            this.notification.title = 'Erro!'
+            this.notification.description = description
+            this.snackbar = true
           })
       } else {
         this.notification.title = 'Aviso. As credenciais devem ser informadas'

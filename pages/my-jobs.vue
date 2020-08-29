@@ -107,8 +107,12 @@
                 <div class="my-4">{{ job.description }}</div>
               </v-card-text>
               <v-card-actions>
-                <v-btn dark block grey>
-                  Candatar-se com o LinkedIn
+                <v-spacer></v-spacer>
+                <v-btn dark grey>
+                  Editar
+                </v-btn>
+                <v-btn dark grey>
+                  Ver candidatos
                 </v-btn>
               </v-card-actions>
             </v-card>

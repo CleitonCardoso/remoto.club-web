@@ -15,7 +15,7 @@
                 to="/"
                 style="text-decoration: none; color: inherit;"
               >
-                <span class="title ml-3 mr-5 text--darken-4">Nova vaga</span>
+                <span class="title ml-3 mr-5 text--darken-4">Meu perfil</span>
               </router-link>
             </v-toolbar-title>
           </v-toolbar>
@@ -26,32 +26,6 @@
                 label="Título"
                 name="title"
                 type="text"
-              ></v-text-field>
-              <v-select
-                v-model="job.contractType"
-                :items="contractTypes"
-                label="Tipo de contrato"
-                name="contractType"
-                type="text"
-              ></v-select>
-              <v-select
-                v-model="job.experienceRequired"
-                :items="experienceTypes"
-                label="Experiência desejada"
-                name="experienceType"
-                type="text"
-              ></v-select>
-              <v-textarea
-                v-model="job.description"
-                label="Descrição"
-                name="description"
-                type="text"
-              ></v-textarea>
-              <v-text-field
-                v-model="job.salary"
-                label="Faixa salarial"
-                name="description"
-                type="number"
               ></v-text-field>
             </v-form>
           </v-card-text>
@@ -76,7 +50,7 @@ export default {
       job: {
         title: null,
         contractType: null,
-        experienceRequired: null,
+        experienceType: null,
         description: null,
         salary: null,
       },

@@ -75,13 +75,13 @@
     <v-main>
       <v-container fluid class="grey lighten-4 fill-height align-start">
         <v-row>
-          <v-col cols="2">
+          <v-col md="2">
             <!-- Ad -->
           </v-col>
-          <v-col cols="8">
+          <v-col md="8" xs="12">
             <nuxt />
           </v-col>
-          <v-col cols="2">
+          <v-col md="2">
             <!-- Ad -->
           </v-col>
         </v-row>
@@ -107,10 +107,13 @@ export default {
         { icon: 'create', text: 'Adicionar uma vaga', to: '/new-job' },
         { icon: 'list', text: 'Ver minhas vagas', to: '/my-jobs' },
         { divider: true },
-        { icon: 'exit_to_app', text: 'Sair', exit: true },
+        { icon: 'mdi-account-circle', text: 'Meu perfil', to: '/my-profile' },
+        { icon: 'mdi-cog', text: 'Configurações', to: '/configs' },
+        { divider: true },
+        { icon: 'mdi-logout', text: 'Sair', exit: true },
       ]
     } else {
-      this.items = [{ icon: 'vpn_key', text: 'Entrar', to: '/login' }]
+      this.items = [{ icon: 'mdi-login', text: 'Entrar', to: '/login' }]
     }
   },
   methods: {
