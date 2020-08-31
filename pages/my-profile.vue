@@ -20,11 +20,12 @@
             </v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form>
+            <v-form ref="profile_form">
               <v-text-field
                 v-model="appUser.name"
                 label="Nome"
                 name="name"
+                :rules="notEmptyRule"
                 type="text"
               ></v-text-field>
 
@@ -32,6 +33,7 @@
                 v-model="appUser.login.username"
                 label="Nome de usuário"
                 name="username"
+                :rules="notEmptyRule"
                 type="text"
               ></v-text-field>
 
@@ -39,7 +41,8 @@
                 v-model="appUser.login.email"
                 label="Email"
                 name="email"
-                type="text"
+                :rules="emailRules"
+                type="mail"
               ></v-text-field>
             </v-form>
             <nuxt-link to="/recovery-password">Recuperação de senha</nuxt-link>
@@ -94,6 +97,13 @@ export default {
         description: '',
         type: '',
       },
+      notEmptyRule: [(v) => !!v || 'O campo precisa ser preenchido!'],
+      emailRules: [
+        (v) =>
+          !v ||
+          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+          'E-mail inválido',
+      ],
     }
   },
   mounted() {
@@ -120,10 +130,18 @@ export default {
         })
     },
     save() {
-      if (this.appUser.login.username !== this.oldUsername) {
-        this.dialog = true
+      const valid = this.$refs.profile_form.validate()
+      if (valid) {
+        if (this.appUser.login.username !== this.oldUsername) {
+          this.dialog = true
+        } else {
+          this.confirmUpdate()
+        }
       } else {
-        this.confirmUpdate()
+        this.notification.title = 'Erro'
+        this.notification.description = 'Verifique os erros no formulário'
+        this.notification.type = 'error'
+        this.snackbar = true
       }
     },
     confirmUpdate() {

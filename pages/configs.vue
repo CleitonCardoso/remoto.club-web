@@ -22,17 +22,19 @@
             </v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form>
+            <v-form ref="configs_form">
               <v-text-field
                 v-model="tenant.companyName"
                 label="Nome da empresa"
                 name="companyName"
                 type="text"
+                :rules="notEmptyRule"
               ></v-text-field>
               <v-text-field
                 v-model="tenant.phone"
                 label="Telefone"
                 name="companyName"
+                mask="(##) #####-####"
                 type="text"
               ></v-text-field>
               <v-text-field
@@ -40,6 +42,7 @@
                 label="Email de contato"
                 name="contactEmail"
                 type="text"
+                :rules="emailRules"
               ></v-text-field>
             </v-form>
           </v-card-text>
@@ -73,6 +76,13 @@ export default {
         description: '',
         type: '',
       },
+      notEmptyRule: [(v) => !!v || 'O campo precisa ser preenchido!'],
+      emailRules: [
+        (v) =>
+          !v ||
+          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+          'E-mail inválido',
+      ],
     }
   },
   mounted() {
@@ -97,25 +107,33 @@ export default {
         })
     },
     save() {
-      this.$api
-        .post(`private/tenant`, this.tenant)
-        .then((res) => {
-          console.log(res)
-          this.notification.title = 'Atualizado!'
-          this.notification.description = 'Informações salvas com sucesso'
-          this.notification.type = 'success'
-          this.snackbar = true
-        })
-        .catch((err) => {
-          let message = 'Houve um erro inesperado.'
-          if (err.response && err.response.status === 400) {
-            message = err.response.data.message
-          }
+      const valid = this.$refs.configs_form.validate()
+      if (valid) {
+        this.$api
+          .post(`private/tenant`, this.tenant)
+          .then((res) => {
+            console.log(res)
+            this.notification.title = 'Atualizado!'
+            this.notification.description = 'Informações salvas com sucesso'
+            this.notification.type = 'success'
+            this.snackbar = true
+          })
+          .catch((err) => {
+            let message = 'Houve um erro inesperado.'
+            if (err.response && err.response.status === 400) {
+              message = err.response.data.message
+            }
 
-          this.notification.title = 'Erro'
-          this.notification.description = message
-          this.snackbar = true
-        })
+            this.notification.title = 'Erro'
+            this.notification.description = message
+            this.snackbar = true
+          })
+      } else {
+        this.notification.title = 'Erro'
+        this.notification.description = 'Verifique os erros no formulário'
+        this.notification.type = 'error'
+        this.snackbar = true
+      }
     },
   },
 }

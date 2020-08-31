@@ -4,7 +4,7 @@
       <v-row align="center" justify="center">
         <ErrorAlert
           :notification="notification"
-          :show="snackbar"
+          :show.sync="snackbar"
           type="error"
           @hide="snackbar = !snackbar"
         ></ErrorAlert>
@@ -24,13 +24,14 @@
               </v-toolbar-title>
             </v-toolbar>
             <v-card-text>
-              <v-form>
+              <v-form ref="register_form">
                 <v-text-field
                   v-model="login.username"
                   label="Login"
                   name="login"
                   prepend-icon="mdi-account"
                   type="text"
+                  :rules="notEmptyRule"
                 ></v-text-field>
 
                 <v-text-field
@@ -39,6 +40,7 @@
                   name="password"
                   prepend-icon="mdi-lock"
                   type="password"
+                  :rules="notEmptyRule"
                 ></v-text-field>
 
                 <v-text-field
@@ -46,7 +48,8 @@
                   label="Email"
                   name="email"
                   prepend-icon="mdi-mail"
-                  type="text"
+                  type="mail"
+                  :rules="emailRules"
                 ></v-text-field>
 
                 <v-text-field
@@ -55,6 +58,7 @@
                   name="companyName"
                   prepend-icon="mdi-briefcase"
                   type="text"
+                  :rules="notEmptyRule"
                 ></v-text-field>
               </v-form>
             </v-card-text>
@@ -96,26 +100,41 @@ export default {
         description: '',
         type: '',
       },
+      notEmptyRule: [(v) => !!v || 'O campo precisa ser preenchido!'],
+      emailRules: [
+        (v) =>
+          !v ||
+          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+          'E-mail inválido',
+      ],
     }
   },
   methods: {
     create() {
-      this.$api
-        .post('/login/create', this.login)
-        .then((resp) => {
-          console.log(resp)
-          this.$router.push('/login')
-        })
-        .catch((err) => {
-          let message = 'Houve um erro inesperado.'
-          if (err.response && err.response.status === 400) {
-            message = err.response.data.message
-          }
+      const valid = this.$refs.register_form.validate()
+      if (valid) {
+        this.$api
+          .post('/login/create', this.login)
+          .then((resp) => {
+            console.log(resp)
+            this.$router.push('/login')
+          })
+          .catch((err) => {
+            let message = 'Houve um erro inesperado.'
+            if (err.response && err.response.status === 400) {
+              message = err.response.data.message
+            }
 
-          this.notification.title = 'Erro'
-          this.notification.description = message
-          this.snackbar = true
-        })
+            this.notification.title = 'Erro'
+            this.notification.description = message
+            this.snackbar = true
+          })
+      } else {
+        this.notification.title = 'Erro'
+        this.notification.description = 'Verifique os erros no formulário'
+        this.notification.type = 'error'
+        this.snackbar = true
+      }
     },
   },
 }

@@ -22,13 +22,14 @@
               </v-toolbar-title>
             </v-toolbar>
             <v-card-text>
-              <v-form>
+              <v-form ref="login_form">
                 <v-text-field
                   v-model="loginData.username"
                   label="Login"
                   name="login"
                   prepend-icon="mdi-account"
                   type="text"
+                  :rules="notEmptyRule"
                 ></v-text-field>
 
                 <v-text-field
@@ -38,6 +39,7 @@
                   name="password"
                   prepend-icon="mdi-lock"
                   type="password"
+                  :rules="notEmptyRule"
                 ></v-text-field>
               </v-form>
             </v-card-text>
@@ -77,13 +79,15 @@ export default {
         description: 'desc',
       },
       recoverPassEmail: '',
+      notEmptyRule: [(v) => !!v || 'O campo precisa ser preenchido!'],
     }
   },
   methods: {
     login() {
-      const username = this.loginData.username
-      const password = this.loginData.password
-      if (username && password) {
+      const valid = this.$refs.login_form.validate()
+      if (valid) {
+        const username = this.loginData.username
+        const password = this.loginData.password
         this.$api
           .post('/login', { username, password })
           .then((resp) => {

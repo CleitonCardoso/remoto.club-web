@@ -67,25 +67,34 @@ export default {
   },
   methods: {
     send() {
-      this.$api
-        .post('/login/recovery', null, { params: { email: this.email } })
-        .then((resp) => {
-          console.log(resp)
-          this.notification.title = 'Enviado'
-          this.notification.description = 'Verifique sua caixa de email e spam'
-          this.notification.type = 'success'
-          this.snackbar = true
-        })
-        .catch((err) => {
-          let message = 'Houve um erro inesperado.'
-          if (err.response && err.response.status === 400) {
-            message = err.response.data.message
-          }
+      if (true) {
+        this.notification.title = 'ATENÇÃO'
+        this.notification.description =
+          'Esta funcionalidade ainda não foi implementada, em breve...'
+        this.notification.type = 'alert'
+        this.snackbar = true
+      } else {
+        this.$api
+          .post('/login/recovery', null, { params: { email: this.email } })
+          .then((resp) => {
+            console.log(resp)
+            this.notification.title = 'Enviado'
+            this.notification.description =
+              'Verifique sua caixa de email e spam'
+            this.notification.type = 'success'
+            this.snackbar = true
+          })
+          .catch((err) => {
+            let message = 'Houve um erro inesperado.'
+            if (err.response && err.response.status === 400) {
+              message = err.response.data.message
+            }
 
-          this.notification.title = 'Erro'
-          this.notification.description = message
-          this.snackbar = true
-        })
+            this.notification.title = 'Erro'
+            this.notification.description = message
+            this.snackbar = true
+          })
+      }
     },
   },
 }

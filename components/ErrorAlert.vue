@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar v-model="showModal" top :color="getNotificationStyle">
+  <v-snackbar v-model="this.show" top :color="getNotificationStyle">
     <strong>
       {{ notification.title }}
     </strong>
@@ -19,9 +19,6 @@ export default {
     show: Boolean,
   },
   computed: {
-    showModal() {
-      return this.show
-    },
     getNotificationStyle() {
       switch (this.notification.type) {
         case 'success':
