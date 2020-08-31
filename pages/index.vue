@@ -95,7 +95,10 @@
           ></v-progress-circular>
         </div>
 
-        <v-row v-for="(job, index) in jobs" :key="`job-${index}`">
+        <v-row
+          v-for="(job, index, showDescription) in jobs"
+          :key="`job-${index}`"
+        >
           <v-col>
             <v-card dark color="black darken-1" elevation="5">
               <v-card-title
@@ -110,7 +113,9 @@
                   Faixa salarial: <strong> {{ format(job.salary) }}</strong>
                 </div>
 
-                <div class="my-4">{{ job.description }}</div>
+                <div v-if="true" class="my-4">
+                  <p style="white-space: pre-wrap;">{{ job.description }}</p>
+                </div>
               </v-card-text>
               <v-card-actions>
                 <v-btn dark block grey @click="apply">
@@ -198,6 +203,10 @@ export default {
           this.jobs = res.data.content
           this.loading = false
           this.resultSize = res.data.totalPages
+
+          this.jobs.forEach((element) => {
+            this.$set(element, 'showDescription', false)
+          })
         })
         .catch((err) => {
           let message = 'Houve um erro inesperado.'

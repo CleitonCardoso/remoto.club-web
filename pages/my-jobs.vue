@@ -118,7 +118,7 @@
                 <v-btn dark grey @click="edit(job.uuid)">
                   Editar
                 </v-btn>
-                <v-btn dark grey>
+                <v-btn dark grey @click="openCandidates(job.uuid)">
                   Ver candidatos
                 </v-btn>
               </v-card-actions>
@@ -226,6 +226,13 @@ export default {
     },
     format(value) {
       return brlFormatter.format(value)
+    },
+    openCandidates(uuid) {
+      this.notification.title = 'ATENÇÃO'
+      this.notification.description =
+        'Esta funcionalidade ainda não foi implementada, em breve...'
+      this.notification.type = 'alert'
+      this.snackbar = true
     },
   },
 }

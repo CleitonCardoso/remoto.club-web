@@ -54,7 +54,6 @@
 <script>
 export default {
   layout: 'clean',
-  middleware: 'not-authenticated',
   data() {
     return {
       email: '',

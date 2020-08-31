@@ -1,10 +1,10 @@
 <template>
-  <v-snackbar v-model="show" top :color="getNotificationStyle">
+  <v-snackbar v-model="showModal" top :color="getNotificationStyle">
     <strong>
       {{ notification.title }}
     </strong>
     <br />
-    {{ notification.description }}
+    <p style="white-space: pre-wrap;">{{ notification.description }}</p>
     <template v-slot:action="{ attrs }">
       <v-btn text v-bind="attrs" @click="$emit('hide')">
         Ok
@@ -19,6 +19,9 @@ export default {
     show: Boolean,
   },
   computed: {
+    showModal() {
+      return this.show
+    },
     getNotificationStyle() {
       switch (this.notification.type) {
         case 'success':

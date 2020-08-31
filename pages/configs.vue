@@ -24,15 +24,28 @@
           <v-card-text>
             <v-form>
               <v-text-field
-                v-model="job.title"
-                label="Título"
-                name="title"
+                v-model="tenant.companyName"
+                label="Nome da empresa"
+                name="companyName"
+                type="text"
+              ></v-text-field>
+              <v-text-field
+                v-model="tenant.phone"
+                label="Telefone"
+                name="companyName"
+                type="text"
+              ></v-text-field>
+              <v-text-field
+                v-model="tenant.contactEmail"
+                label="Email de contato"
+                name="contactEmail"
                 type="text"
               ></v-text-field>
             </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
+            <v-btn dark class="mr-3" to="/my-jobs">Cancelar</v-btn>
             <v-btn dark class="mr-3" @click="save">Salvar</v-btn>
           </v-card-actions>
         </v-card>
@@ -49,23 +62,11 @@ export default {
   components: { ErrorAlert },
   data() {
     return {
-      job: {
-        title: null,
-        contractType: null,
-        experienceType: null,
-        description: null,
-        salary: null,
+      tenant: {
+        companyName: null,
+        phone: null,
+        contactEmail: null,
       },
-      contractTypes: [
-        { text: 'CLT', value: 'CLT' },
-        { text: 'PJ', value: 'PJ' },
-      ],
-      experienceTypes: [
-        { text: 'Júnior', value: 'JUNIOR' },
-        { text: 'Pleno', value: 'PLENO' },
-        { text: 'Sênior', value: 'SENIOR' },
-        { text: 'Especialista', value: 'ESPECIALISTA' },
-      ],
       snackbar: false,
       notification: {
         title: '',
@@ -74,14 +75,36 @@ export default {
       },
     }
   },
-  mounted() {},
+  mounted() {
+    this.load()
+  },
   methods: {
+    load() {
+      this.$api
+        .get(`private/tenant`)
+        .then((res) => {
+          this.tenant = res.data
+        })
+        .catch((err) => {
+          let message = 'Houve um erro inesperado.'
+          if (err.response && err.response.status === 400) {
+            message = err.response.data.message
+          }
+
+          this.notification.title = 'Erro'
+          this.notification.description = message
+          this.snackbar = true
+        })
+    },
     save() {
       this.$api
-        .post(`private/my-jobs`, this.job)
+        .post(`private/tenant`, this.tenant)
         .then((res) => {
           console.log(res)
-          this.$router.push('/my-jobs')
+          this.notification.title = 'Atualizado!'
+          this.notification.description = 'Informações salvas com sucesso'
+          this.notification.type = 'success'
+          this.snackbar = true
         })
         .catch((err) => {
           let message = 'Houve um erro inesperado.'
