@@ -111,7 +111,9 @@
                   <strong> {{ format(job.salary) }}</strong>
                 </div>
 
-                <div class="my-4">{{ job.description }}</div>
+                <div class="my-4">
+                  <p style="white-space: pre-wrap;">{{ job.description }}</p>
+                </div>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
