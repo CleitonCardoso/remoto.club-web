@@ -28,17 +28,74 @@ export default {
    */
   head: {
     title: 'Remoto.Club',
-    titleTemplate: '%s - Remoto.Club',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      {
+        hid: 'viewport',
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1',
+      },
+      {
+        hid: 'twitter:card',
+        name: 'twitter:card',
+        content: 'Remoto.Club - Vagas homeOffice para TI',
+      },
+      { hid: 'twitter:site', name: 'twitter:site', content: '@remoto.club' },
+      {
+        hid: 'twitter:creator',
+        name: 'twitter:creator',
+        content: '@remoto.club',
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: 'Remoto.Club - Vagas homeOffice para TI',
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content:
+          'Simples, direto e reto. O seu site de vagas HomeOffice para TI.',
+      },
+      {
+        hid: 'twitter:image',
+        name: 'twitter:image',
+        content:
+          'https://images.pexels.com/photos/4050320/pexels-photo-4050320.jpeg',
+      },
       {
         hid: 'description',
         name: 'description',
-        content: 'O único clube de trabalho remoto de TI possível',
+        content:
+          'Simples, direto e reto. O seu site de vagas HomeOffice para TI.',
+      },
+      {
+        hid: 'og:image',
+        property: 'og:image',
+        content:
+          'https://images.pexels.com/photos/4050320/pexels-photo-4050320.jpeg',
+      },
+      {
+        hid: 'og:site_name',
+        name: 'og:site_name',
+        content: 'Remoto.Club - Vagas homeOffice para TI',
+      },
+      { hid: 'og:title', name: 'og:title', content: 'Remoto.Club' },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content:
+          'Simples, direto e reto. O seu site de vagas HomeOffice para TI.',
       },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' },
+      {
+        rel: 'stylesheet',
+        href:
+          'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons',
+      },
+    ],
   },
   /*
    ** Global CSS

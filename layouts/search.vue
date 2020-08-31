@@ -127,24 +127,5 @@ export default {
       }
     },
   },
-  head() {
-    return {
-      title: 'Remoto.Club',
-      meta: [
-        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'My custom description',
-        },
-      ],
-    }
-  },
 }
 </script>
-
-<style>
-#keep .v-navigation-drawer__border {
-  /* display: none; */
-}
-</style>
