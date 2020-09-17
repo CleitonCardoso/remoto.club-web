@@ -30,16 +30,19 @@
                   prepend-icon="mdi-account"
                   type="text"
                   :rules="notEmptyRule"
+                  @keypress.enter="jumpToPassword"
                 ></v-text-field>
 
                 <v-text-field
                   id="password"
+                  ref="password"
                   v-model="loginData.password"
                   label="Password"
                   name="password"
                   prepend-icon="mdi-lock"
                   type="password"
                   :rules="notEmptyRule"
+                  @keypress.enter="login"
                 ></v-text-field>
               </v-form>
             </v-card-text>
@@ -114,6 +117,9 @@ export default {
       } else {
         this.notification.title = 'Aviso. As credenciais devem ser informadas'
       }
+    },
+    jumpToPassword() {
+      this.$refs.password.focus()
     },
     cleanFieldsLogin() {
       this.loginData = { username: '', password: '' }
