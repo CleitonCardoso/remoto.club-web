@@ -92,6 +92,7 @@ export default {
         this.$api
           .post('/login', { username, password })
           .then((resp) => {
+            debugger
             const token = resp.data.token
             this.$store.commit('setToken', token)
             Cookie.set('token', token)
@@ -99,6 +100,7 @@ export default {
             this.$router.push('/')
           })
           .catch((e) => {
+            debugger
             let description = 'Servidor indisponível'
             if (e.response) {
               if (e.response.status === 401) {

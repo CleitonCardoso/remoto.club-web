@@ -22,9 +22,8 @@ export default function ({ $axios, store }, inject) {
       if (error.response.status === 401 || error.response.status === 403) {
         store.commit('removeToken')
         store.$router.push('/login')
-      } else {
-        return Promise.reject(error)
       }
+      return Promise.reject(error)
     }
   )
 
