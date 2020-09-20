@@ -1,12 +1,17 @@
 <template>
-  <v-snackbar v-model="this.show" top :color="getNotificationStyle">
+  <v-snackbar
+    v-model="show"
+    top
+    :color="getNotificationStyle"
+    @hide="show = !show"
+  >
     <strong>
       {{ notification.title }}
     </strong>
     <br />
     <p style="white-space: pre-wrap;">{{ notification.description }}</p>
     <template v-slot:action="{ attrs }">
-      <v-btn text v-bind="attrs" @click="$emit('hide')">
+      <v-btn text v-bind="attrs" @click="hideAlert">
         Ok
       </v-btn>
     </template>
@@ -16,7 +21,11 @@
 export default {
   props: {
     notification: Object,
-    show: Boolean,
+  },
+  data() {
+    return {
+      show: false,
+    }
   },
   computed: {
     getNotificationStyle() {
@@ -30,6 +39,14 @@ export default {
         default:
           return 'red darken-4'
       }
+    },
+  },
+  methods: {
+    showAlert() {
+      this.show = true
+    },
+    hideAlert() {
+      this.show = false
     },
   },
 }

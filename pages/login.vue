@@ -3,9 +3,8 @@
     <v-container class="fill-height" fluid>
       <v-row align="center" justify="center">
         <ErrorAlert
+          ref="message-alert"
           :notification="notification"
-          :show="snackbar"
-          @hide="snackbar = !snackbar"
         ></ErrorAlert>
         <v-col xs="12" sm="6" lg="4">
           <v-card class="elevation-12">
@@ -72,7 +71,6 @@ export default {
   components: { ErrorAlert },
   data() {
     return {
-      snackbar: false,
       loginData: {
         username: '',
         password: '',
@@ -112,7 +110,7 @@ export default {
             }
             this.notification.title = 'Erro!'
             this.notification.description = description
-            this.snackbar = true
+            this.$refs['message-alert'].showAlert()
           })
       } else {
         this.notification.title = 'Aviso. As credenciais devem ser informadas'

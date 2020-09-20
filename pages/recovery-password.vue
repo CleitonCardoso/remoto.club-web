@@ -1,11 +1,6 @@
 <template>
   <v-main>
-    <ErrorAlert
-      :notification="notification"
-      :show="snackbar"
-      type="error"
-      @hide="snackbar = !snackbar"
-    ></ErrorAlert>
+    <ErrorAlert ref="message-alert" :notification="notification"></ErrorAlert>
     <v-container class="fill-height" fluid>
       <v-row align="center" justify="center">
         <v-col xs="12" sm="6" lg="4">
@@ -72,7 +67,7 @@ export default {
         this.notification.description =
           'Esta funcionalidade ainda não foi implementada, em breve...'
         this.notification.type = 'alert'
-        this.snackbar = true
+        this.$refs['message-alert'].showAlert()
       } else {
         this.$api
           .post('/login/recovery', null, { params: { email: this.email } })
@@ -82,7 +77,7 @@ export default {
             this.notification.description =
               'Verifique sua caixa de email e spam'
             this.notification.type = 'success'
-            this.snackbar = true
+            this.$refs['message-alert'].showAlert()
           })
           .catch((err) => {
             let message = 'Houve um erro inesperado.'
@@ -92,7 +87,7 @@ export default {
 
             this.notification.title = 'Erro'
             this.notification.description = message
-            this.snackbar = true
+            this.$refs['message-alert'].showAlert()
           })
       }
     },

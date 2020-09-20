@@ -1,12 +1,7 @@
 <template>
   <v-container>
     <v-layout row wrap>
-      <ErrorAlert
-        :notification="notification"
-        :show="snackbar"
-        type="error"
-        @hide="snackbar = !snackbar"
-      ></ErrorAlert>
+      <ErrorAlert ref="message-alert" :notification="notification"></ErrorAlert>
       <v-flex class="align-start">
         <v-card dark color="black darken-1">
           <v-card-title>
@@ -216,7 +211,7 @@ export default {
           this.notification.title = 'Erro'
           this.notification.description = message
           this.notification.type = 'error'
-          this.snackbar = true
+          this.$refs['message-alert'].showAlert()
         })
     },
     removeKeyWords(item) {
@@ -234,7 +229,7 @@ export default {
       this.notification.description =
         'Esta funcionalidade ainda não foi implementada, em breve...'
       this.notification.type = 'alert'
-      this.snackbar = true
+      this.$refs['message-alert'].showAlert()
     },
   },
 }

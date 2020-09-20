@@ -1,12 +1,7 @@
 <template>
   <v-container>
     <v-layout row wrap>
-      <ErrorAlert
-        :notification="notification"
-        :show="snackbar"
-        type="error"
-        @hide="snackbar = !snackbar"
-      ></ErrorAlert>
+      <ErrorAlert ref="message-alert" :notification="notification"></ErrorAlert>
       <v-flex class="align-start">
         <v-card dark color="black darken-1">
           <v-card-title>
@@ -95,10 +90,7 @@
           ></v-progress-circular>
         </div>
 
-        <v-row
-          v-for="(job, index, showDescription) in jobs"
-          :key="`job-${index}`"
-        >
+        <v-row v-for="(job, index) in jobs" :key="`job-${index}`">
           <v-col>
             <v-card dark color="black darken-1" elevation="5">
               <v-card-title
@@ -118,7 +110,7 @@
                 </div>
               </v-card-text>
               <v-card-actions>
-                <v-btn dark block grey @click="apply">
+                <v-btn dark block grey @click="apply(job.uuid)">
                   Candatar-se com o LinkedIn
                 </v-btn>
               </v-card-actions>
@@ -134,6 +126,35 @@
         ></v-pagination>
       </v-flex>
     </v-layout>
+    <v-dialog v-model="applyModal" width="500" dark color="black darken-1">
+      <v-card dark color="black darken-1">
+        <v-card-title>
+          Aplicar à vaga
+        </v-card-title>
+
+        <v-card-text>
+          <v-text-field
+            v-model="linkedInUrl"
+            label="Url do perfil do LinkedIn"
+            name="Perfil do LinkedIn"
+            prepend-icon="mdi-linkedin"
+            type="text"
+          ></v-text-field>
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn dark grey @click="cancelApply">
+            Cancelar
+          </v-btn>
+          <v-btn dark grey @click="confirmApply">
+            Confirmar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 <script>
@@ -155,6 +176,9 @@ export default {
       loading: false,
       pageIndex: 1,
       resultSize: 10,
+      applyModal: false,
+      linkedInUrl: '',
+      jobUuid: '',
       jobs: [],
       filter: {
         keyWords: [],
@@ -217,7 +241,7 @@ export default {
           this.notification.title = 'Erro'
           this.notification.description = message
           this.notification.type = 'error'
-          this.snackbar = true
+          this.$refs['message-alert'].showAlert()
         })
     },
     removeKeyWords(item) {
@@ -227,12 +251,39 @@ export default {
     format(value) {
       return brlFormatter.format(value)
     },
-    apply() {
-      this.notification.title = 'ATENÇÃO'
-      this.notification.description =
-        'Esta funcionalidade ainda não foi implementada, em breve...'
-      this.notification.type = 'alert'
-      this.snackbar = true
+    apply(jobUuid) {
+      this.jobUuid = jobUuid
+      this.applyModal = true
+    },
+    async confirmApply() {
+      const params = {}
+      params['linkedin-url'] = this.linkedInUrl
+
+      await this.$api
+        .post(`public/jobs/` + this.jobUuid + `/apply`, null, {
+          params,
+        })
+        .then((res) => {
+          this.notification.title = 'Feito'
+          this.notification.description = 'Você aplicou para esta vaga!'
+          this.notification.type = 'success'
+          this.$refs['message-alert'].showAlert()
+          this.applyModal = false
+        })
+        .catch((err) => {
+          let message = 'Houve um erro inesperado.'
+          if (err.response && err.response.status === 400) {
+            message = err.response.data.message
+          }
+
+          this.notification.title = 'Erro'
+          this.notification.description = message || ''
+          this.notification.type = 'error'
+          this.$refs['message-alert'].showAlert()
+        })
+    },
+    cancelApply() {
+      this.applyModal = false
     },
   },
 }

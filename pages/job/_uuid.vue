@@ -1,12 +1,7 @@
 <template>
   <v-container>
     <v-layout row wrap>
-      <ErrorAlert
-        :notification="notification"
-        :show="snackbar"
-        type="error"
-        @hide="snackbar = !snackbar"
-      ></ErrorAlert>
+      <ErrorAlert ref="message-alert" :notification="notification"></ErrorAlert>
       <v-flex class="align-start">
         <v-card class="elevation-12">
           <v-toolbar dark flat>
@@ -153,7 +148,7 @@ export default {
 
             this.notification.title = 'Erro'
             this.notification.description = message
-            this.snackbar = true
+            this.$refs['message-alert'].showAlert()
           })
       }
     },
@@ -174,13 +169,13 @@ export default {
 
             this.notification.title = 'Erro'
             this.notification.description = message
-            this.snackbar = true
+            this.$refs['message-alert'].showAlert()
           })
       } else {
         this.notification.title = 'Erro'
         this.notification.description = 'Verifique os erros no formulário'
         this.notification.type = 'error'
-        this.snackbar = true
+        this.$refs['message-alert'].showAlert()
       }
     },
     remove() {
@@ -201,7 +196,7 @@ export default {
 
           this.notification.title = 'Erro'
           this.notification.description = message
-          this.snackbar = true
+          this.$refs['message-alert'].showAlert()
         })
     },
   },

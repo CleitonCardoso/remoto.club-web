@@ -3,10 +3,8 @@
     <v-container class="fill-height" fluid>
       <v-row align="center" justify="center">
         <ErrorAlert
+          ref="message-alert"
           :notification="notification"
-          :show.sync="snackbar"
-          type="error"
-          @hide="snackbar = !snackbar"
         ></ErrorAlert>
         <v-col xs="12" sm="6" lg="4">
           <v-card class="elevation-12">
@@ -94,7 +92,6 @@ export default {
         email: '',
         tenant: { companyName: '' },
       },
-      snackbar: false,
       notification: {
         title: '',
         description: '',
@@ -127,13 +124,13 @@ export default {
 
             this.notification.title = 'Erro'
             this.notification.description = message
-            this.snackbar = true
+            this.$refs['message-alert'].showAlert()
           })
       } else {
         this.notification.title = 'Erro'
         this.notification.description = 'Verifique os erros no formulário'
         this.notification.type = 'error'
-        this.snackbar = true
+        this.$refs['message-alert'].showAlert()
       }
     },
   },
