@@ -14,5 +14,31 @@ export default function ({ $axios, store }, inject) {
     }
   })
 
+  api.interceptors.response.use(
+    function (response) {
+      return response
+    },
+    function (error) {
+      if (error.response.status === 401) {
+        store.commit('removeToken')
+        store.$router.push('/login')
+      } else {
+        return Promise.reject(error)
+      }
+    }
+  )
+
+  // api.interceptors.response.use(
+  //   (res) => res.data,
+  //   function (error) {
+  //     // Do something with response error
+  //     console.log(redirect)
+  //     if (error.response.status === 401) {
+  //       redirect('/login')
+  //     }
+  //     return Promise.reject(error)
+  //   }
+  // )
+
   inject('api', api)
 }

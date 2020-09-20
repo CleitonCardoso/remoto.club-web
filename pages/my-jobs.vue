@@ -225,11 +225,7 @@ export default {
       return brlFormatter.format(value)
     },
     openCandidates(uuid) {
-      this.notification.title = 'ATENÇÃO'
-      this.notification.description =
-        'Esta funcionalidade ainda não foi implementada, em breve...'
-      this.notification.type = 'alert'
-      this.$refs['message-alert'].showAlert()
+      this.$router.push('/candidates/' + uuid)
     },
   },
 }
