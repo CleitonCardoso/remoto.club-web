@@ -109,6 +109,7 @@ export default {
         { divider: true },
         { icon: 'mdi-account-circle', text: 'Meu perfil', to: '/my-profile' },
         { icon: 'mdi-cog', text: 'Configurações', to: '/configs' },
+        { icon: 'mdi-lightbulb-on', text: 'Sugestões', to: '/sac' },
         { divider: true },
         { icon: 'mdi-logout', text: 'Sair', exit: true },
       ]
