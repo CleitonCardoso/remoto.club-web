@@ -15,7 +15,7 @@
             </v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form ref="sac_form">
+            <v-form ref="configs_form">
               <v-text-field
                 v-model="sac.title"
                 label="titulo"
@@ -24,12 +24,13 @@
                 :rules="notEmptyRule"
               ></v-text-field>
 
-              <v-text-field
+              <v-textarea
                 v-model="sac.text"
-                label="sugestao"
-                name="text"
+                label="Descrição"
+                name="description"
                 type="text"
-              ></v-text-field>
+                :rules="notEmptyRule"
+              ></v-textarea>
             </v-form>
           </v-card-text>
           <v-card-actions>
@@ -64,28 +65,7 @@ export default {
       notEmptyRule: [(v) => !!v || 'O campo precisa ser preenchido!'],
     }
   },
-  mounted() {
-    this.load()
-  },
   methods: {
-    load() {
-      this.$api
-        .get(`private/sac`)
-        .then((res) => {
-          this.sac = res.data
-        })
-        .catch((err) => {
-          let message = 'Houve um erro inesperado.'
-          console.log('error')
-          if (err.response && err.response.status === 400) {
-            message = err.response.data.message
-          }
-
-          this.notification.title = 'Erro'
-          this.notification.description = message
-          this.$refs['message-alert'].showAlert()
-        })
-    },
     save() {
       const valid = this.$refs.configs_form.validate()
       if (valid) {
