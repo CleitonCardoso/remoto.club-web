@@ -9,8 +9,8 @@ export default function ({ $axios, store }, inject) {
   })
 
   api.onRequest((config) => {
-    if (store.state.token) {
-      config.headers.common.Authorization = `Bearer ${store.state.token}`
+    if (store.$auth.loggedIn) {
+      config.headers.common.Authorization = `${store.$auth.getToken('local')}`
     }
   })
 

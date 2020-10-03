@@ -73,7 +73,7 @@ import ErrorAlert from '~/components/ErrorAlert'
 
 export default {
   layout: 'search',
-  middleware: 'authenticated',
+  middleware: 'auth',
   components: { ErrorAlert },
   data() {
     return {
@@ -143,7 +143,6 @@ export default {
       this.$api
         .post(`private/profile`, this.appUser)
         .then((res) => {
-          console.log(res)
           if (this.appUser.login.username !== this.oldUsername) {
             this.$store.commit('removeToken')
             this.$router.push('/login')

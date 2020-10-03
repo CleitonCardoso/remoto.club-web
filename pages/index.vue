@@ -216,6 +216,7 @@ export default {
       this.load()
     },
     async load() {
+      debugger
       this.loading = true
       const params = this.filter
       params['page-index'] = this.pageIndex

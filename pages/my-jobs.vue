@@ -145,7 +145,7 @@ const brlFormatter = new Intl.NumberFormat('pt-BR', {
 
 export default {
   layout: 'search',
-  middleware: 'authenticated',
+  middleware: 'auth',
   components: { ErrorAlert },
   data() {
     return {
