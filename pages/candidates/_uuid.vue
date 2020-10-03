@@ -43,7 +43,7 @@ import ErrorAlert from '~/components/ErrorAlert'
 
 export default {
   layout: 'search',
-  middleware: 'authenticated',
+  middleware: 'auth',
   components: { ErrorAlert },
   data() {
     return {

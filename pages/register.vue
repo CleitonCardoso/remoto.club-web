@@ -6,7 +6,12 @@
           ref="message-alert"
           :notification="notification"
         ></ErrorAlert>
-        <v-col xs="12" sm="6" lg="4">
+        <v-col
+          v-if="registrationType === 'NORMAL' || true"
+          xs="12"
+          sm="6"
+          lg="4"
+        >
           <v-card class="elevation-12">
             <v-toolbar dark flat>
               <v-toolbar-title>
@@ -18,11 +23,77 @@
                     >Remoto.<span class="font-weight-light">Club</span></span
                   >
                 </router-link>
-                Cadastro
+                <span>
+                  Cadastro<span v-if="registrationType"
+                    >: {{ getRegistrationTypeLabel }}</span
+                  >
+                </span>
               </v-toolbar-title>
             </v-toolbar>
             <v-card-text>
-              <v-form ref="register_form">
+              <div v-if="!(linkedInCode || loginAndPasswordRegistration)">
+                <v-btn
+                  v-if="!linkedInCode"
+                  dark
+                  :href="getUrlToLinkedin"
+                  block
+                  class="mt-4 mb-4"
+                >
+                  <span>
+                    <v-icon>mdi-linkedin</v-icon>
+                    Registrar com o LinkedIn
+                  </span>
+                </v-btn>
+
+                <h3 v-if="!linkedInCode" class="text-center">ou</h3>
+
+                <v-btn
+                  v-if="!linkedInCode"
+                  dark
+                  block
+                  class="mt-4 mb-4"
+                  @click="loginAndPasswordRegistration = true"
+                >
+                  <span>
+                    Login e senha
+                  </span>
+                </v-btn>
+              </div>
+              <div
+                v-if="
+                  (linkedInCode || loginAndPasswordRegistration) &&
+                  !registrationType
+                "
+              >
+                <v-col>
+                  <v-btn
+                    x-large
+                    class="mr-3"
+                    dark
+                    block
+                    @click="registrationType = 'COMPANY'"
+                    >Recrutador</v-btn
+                  >
+                </v-col>
+                <v-col>
+                  <v-btn
+                    x-large
+                    class="mr-3"
+                    dark
+                    block
+                    @click="registrationType = 'CANDIDATE'"
+                    >Candidato</v-btn
+                  >
+                </v-col>
+              </div>
+
+              <v-form
+                v-if="
+                  (linkedInCode || loginAndPasswordRegistration) &&
+                  registrationType
+                "
+                ref="register_form"
+              >
                 <v-text-field
                   v-model="login.username"
                   label="Login"
@@ -33,6 +104,7 @@
                 ></v-text-field>
 
                 <v-text-field
+                  v-if="loginAndPasswordRegistration"
                   v-model="login.password"
                   label="Password"
                   name="password"
@@ -51,6 +123,7 @@
                 ></v-text-field>
 
                 <v-text-field
+                  v-if="registrationType === 'COMPANY'"
                   v-model="login.tenant.companyName"
                   label="Nome da empresa"
                   name="companyName"
@@ -68,7 +141,23 @@
                 </span>
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn class="mr-3" dark @click="create">Criar</v-btn>
+              <v-btn
+                class="mr-3"
+                :dark="
+                  registrationType &&
+                  $refs.register_form &&
+                  $refs.register_form.validate()
+                "
+                :disabled="
+                  !(
+                    registrationType &&
+                    $refs.register_form &&
+                    $refs.register_form.validate()
+                  )
+                "
+                @click="create"
+                >Concluir</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-col>
@@ -86,12 +175,18 @@ export default {
   components: { ErrorAlert },
   data() {
     return {
+      redirectUri: process.client
+        ? document.location.origin + document.location.pathname
+        : undefined,
+      registrationType: null,
+      loginAndPasswordRegistration: false,
       login: {
         username: '',
         password: '',
         email: '',
         tenant: { companyName: '' },
       },
+      linkedInCode: null,
       notification: {
         title: '',
         description: '',
@@ -106,14 +201,39 @@ export default {
       ],
     }
   },
+  computed: {
+    getUrlToLinkedin() {
+      const clientId = '77sps93aqlw7mu'
+      const redirectUri = this.redirectUri
+      const stateValue = '445sd5f45'
+      return `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&state=${stateValue}&scope=r_liteprofile%20r_emailaddress%20w_member_social`
+    },
+    getRegistrationTypeLabel() {
+      switch (this.registrationType) {
+        case 'COMPANY':
+          return 'Recrutador'
+        case 'CANDIDATE':
+          return 'Cadidate'
+      }
+      return null
+    },
+  },
+  mounted() {
+    this.linkedInCode = this.$route.query.code
+  },
   methods: {
     create() {
       const valid = this.$refs.register_form.validate()
       if (valid) {
         this.$api
-          .post('/login/create', this.login)
+          .post(
+            '/login/create?linkedInCode=' +
+              this.linkedInCode +
+              '&redirectUri=' +
+              this.redirectUri,
+            this.login
+          )
           .then((resp) => {
-            console.log(resp)
             this.$router.push('/login')
           })
           .catch((err) => {

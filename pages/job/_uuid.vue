@@ -97,7 +97,7 @@ import ErrorAlert from '~/components/ErrorAlert'
 
 export default {
   layout: 'search',
-  middleware: 'authenticated',
+  middleware: 'auth',
   components: { ErrorAlert },
   data() {
     return {
@@ -158,7 +158,6 @@ export default {
         this.$api
           .post(`private/my-jobs`, this.job)
           .then((res) => {
-            console.log(res)
             this.$router.push('/my-jobs')
           })
           .catch((err) => {
@@ -185,7 +184,6 @@ export default {
       this.$api
         .delete(`private/my-jobs/${this.job.uuid}`)
         .then((res) => {
-          console.log(res)
           this.$router.push('/my-jobs')
         })
         .catch((err) => {

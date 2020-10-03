@@ -105,7 +105,7 @@ export default {
    ** Plugins to load before mounting the App
    ** https://nuxtjs.org/guide/plugins
    */
-  plugins: ['@/plugins/axios.js', '@/plugins/api.js'],
+  plugins: ['@/plugins/api.js'],
   /*
    ** Auto import components
    ** See https://nuxtjs.org/api/configuration-components
@@ -121,10 +121,35 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt/content
     '@nuxt/content',
   ],
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/login', method: 'post', propertyName: 'token' },
+          logout: false,
+          user: { url: '/private/user', method: 'get', propertyName: false },
+        },
+        localStorage: true,
+        tokenRequired: true,
+        tokenType: 'Bearer',
+      },
+      linkedin: {
+        _scheme: 'oauth2',
+        client_id: '77sps93aqlw7mu',
+        authorization_endpoint:
+          'https://www.linkedin.com/oauth/v2/authorization',
+        response_type: 'code',
+        access_type: 'offline',
+        token_key: 'access_token',
+        scope: ['r_liteprofile', 'r_emailaddress', 'w_member_social'],
+      },
+    },
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options

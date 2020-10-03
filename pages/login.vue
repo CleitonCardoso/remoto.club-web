@@ -51,6 +51,9 @@
               >
               <v-spacer></v-spacer>
               <v-btn dark to="/register">Criar conta</v-btn>
+              <v-btn dark :href="getUrlToLinkedin">
+                <v-icon>mdi-linkedin</v-icon></v-btn
+              >
               <v-btn dark class="mr-3" @click="login">Entrar</v-btn>
             </v-card-actions>
           </v-card>
@@ -63,14 +66,15 @@
 <script>
 import ErrorAlert from '~/components/ErrorAlert'
 
-const Cookie = process.client ? require('js-cookie') : undefined
-
 export default {
   layout: 'clean',
   middleware: 'not-authenticated',
   components: { ErrorAlert },
   data() {
     return {
+      redirectUri: process.client
+        ? document.location.origin + document.location.pathname
+        : undefined,
       loginData: {
         username: '',
         password: '',
@@ -83,24 +87,31 @@ export default {
       notEmptyRule: [(v) => !!v || 'O campo precisa ser preenchido!'],
     }
   },
+  computed: {
+    getUrlToLinkedin() {
+      const clientId = '77sps93aqlw7mu'
+      const stateValue = '445sd5f45'
+      return `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${clientId}&redirect_uri=${this.redirectUri}&state=${stateValue}&scope=r_liteprofile%20r_emailaddress%20w_member_social`
+    },
+  },
+  mounted() {
+    this.linkedInCode = this.$route.query.code
+    if (this.linkedInCode) {
+      this.loginWithLinkedin()
+    }
+  },
   methods: {
     login() {
       const valid = this.$refs.login_form.validate()
       if (valid) {
         const username = this.loginData.username
         const password = this.loginData.password
-        this.$api
-          .post('/login', { username, password })
-          .then((resp) => {
-            debugger
-            const token = resp.data.token
-            this.$store.commit('setToken', token)
-            Cookie.set('token', token)
-            this.notification.title = 'Acesso realizado com sucesso'
+        this.$auth
+          .loginWith('local', { data: { username, password } })
+          .then((response) => {
             this.$router.push('/')
           })
           .catch((e) => {
-            debugger
             let description = 'Servidor indisponível'
             if (e.response) {
               if (e.response.status === 401) {
@@ -117,6 +128,29 @@ export default {
       } else {
         this.notification.title = 'Aviso. As credenciais devem ser informadas'
       }
+    },
+    loginWithLinkedin() {
+      const linkedInCode = this.linkedInCode
+      const redirectUri = this.redirectUri
+      this.$auth
+        .loginWith('local', { data: { linkedInCode, redirectUri } })
+        .then((response) => {
+          this.$router.push('/')
+        })
+        .catch((e) => {
+          let description = 'Servidor indisponível'
+          if (e.response) {
+            if (e.response.status === 401) {
+              description = 'Usuário inválido'
+            }
+            if (e.response.status === 403) {
+              description = 'Senha inválida'
+            }
+          }
+          this.notification.title = 'Erro!'
+          this.notification.description = description
+          this.$refs['message-alert'].showAlert()
+        })
     },
     jumpToPassword() {
       this.$refs.password.focus()

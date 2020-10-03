@@ -72,7 +72,6 @@ export default {
         this.$api
           .post('/login/recovery', null, { params: { email: this.email } })
           .then((resp) => {
-            console.log(resp)
             this.notification.title = 'Enviado'
             this.notification.description =
               'Verifique sua caixa de email e spam'

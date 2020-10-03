@@ -95,6 +95,7 @@
 import Footer from '~/components/Footer'
 
 export default {
+  name: 'Search',
   components: { Footer },
   data: () => ({
     drawer: null,
@@ -102,7 +103,7 @@ export default {
   }),
   computed: {},
   mounted() {
-    if (this.$store.getters.isLoggedIn) {
+    if (this.$auth.loggedIn) {
       this.items = [
         { icon: 'create', text: 'Adicionar uma vaga', to: '/job' },
         { icon: 'list', text: 'Ver minhas vagas', to: '/my-jobs' },
@@ -119,7 +120,7 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.commit('removeToken')
+      this.$auth.logout()
       if (this.$route.path === '/') {
         this.$router.go()
       } else {

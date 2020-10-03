@@ -56,7 +56,7 @@ import ErrorAlert from '~/components/ErrorAlert'
 
 export default {
   layout: 'search',
-  middleware: 'authenticated',
+  middleware: 'auth',
   components: { ErrorAlert },
   data() {
     return {
@@ -107,7 +107,6 @@ export default {
         this.$api
           .post(`private/tenant`, this.tenant)
           .then((res) => {
-            console.log(res)
             this.notification.title = 'Atualizado!'
             this.notification.description = 'Informações salvas com sucesso'
             this.notification.type = 'success'
