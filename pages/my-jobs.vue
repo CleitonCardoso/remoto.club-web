@@ -103,7 +103,11 @@
                 </div>
                 <div class="subtitle-1">
                   Faixa salarial:
-                  <strong> {{ format(job.salary) }}</strong>
+                  <strong>
+                    {{
+                      format(job.salary) + '/' + getCompensationTypeLabel(job)
+                    }}</strong
+                  >
                 </div>
 
                 <div class="my-4">
@@ -223,6 +227,28 @@ export default {
     },
     format(value) {
       return brlFormatter.format(value)
+    },
+    getCompensationTypeLabel(job) {
+      if (job.compensationType) {
+        switch (job.compensationType) {
+          case 'PER_HOUR':
+            return 'hora'
+          case 'PER_MONTH':
+            return 'mês'
+          case 'PER_YEAR':
+            return 'ano'
+        }
+      } else {
+        if (job.salary > 1 && job.salary < 600) {
+          return 'hora'
+        }
+        if (job.salary > 600 && job.salary < 30000) {
+          return 'mês'
+        }
+        if (job.salary > 30000) {
+          return 'ano'
+        }
+      }
     },
     openCandidates(uuid) {
       this.$router.push('/candidates/' + uuid)

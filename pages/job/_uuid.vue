@@ -36,7 +36,6 @@
                 :items="experienceTypes"
                 label="Experiência desejada"
                 name="experienceType"
-                type="text"
                 :rules="notEmptyRule"
               ></v-select>
               <v-textarea
@@ -46,13 +45,26 @@
                 type="text"
                 :rules="notEmptyRule"
               ></v-textarea>
-              <v-text-field
-                v-model="job.salary"
-                label="Faixa salarial"
-                name="description"
-                type="number"
-                :rules="notEmptyRule"
-              ></v-text-field>
+              <v-row>
+                <v-col cols="4">
+                  <v-select
+                    v-model="job.compensationType"
+                    :items="compensationTypes"
+                    label="Unidade"
+                    name="compensationType"
+                    :rules="notEmptyRule"
+                  ></v-select>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field
+                    v-model="job.salary"
+                    label="Faixa salarial"
+                    name="description"
+                    type="number"
+                    :rules="notEmptyRule"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
             </v-form>
           </v-card-text>
           <v-card-actions>
@@ -118,6 +130,11 @@ export default {
         { text: 'Pleno', value: 'PLENO' },
         { text: 'Sênior', value: 'SENIOR' },
         { text: 'Especialista', value: 'ESPECIALISTA' },
+      ],
+      compensationTypes: [
+        { text: 'Por hora', value: 'PER_HOUR' },
+        { text: 'Por mês', value: 'PER_MONTH' },
+        { text: 'Por ano', value: 'PER_YEAR' },
       ],
       snackbar: false,
       notification: {

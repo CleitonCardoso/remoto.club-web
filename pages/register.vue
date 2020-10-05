@@ -213,7 +213,7 @@ export default {
         case 'COMPANY':
           return 'Recrutador'
         case 'CANDIDATE':
-          return 'Cadidate'
+          return 'Cadidato'
       }
       return null
     },
