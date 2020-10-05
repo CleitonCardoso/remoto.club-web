@@ -268,13 +268,13 @@ export default {
             return 'ano'
         }
       } else {
-        if (job.salary > 1 && job.salary < 600) {
+        if (job.salary >= 0 && job.salary < 600) {
           return 'hora'
         }
-        if (job.salary > 600 && job.salary < 30000) {
+        if (job.salary >= 600 && job.salary < 30000) {
           return 'mês'
         }
-        if (job.salary > 30000) {
+        if (job.salary >= 30000) {
           return 'ano'
         }
       }
