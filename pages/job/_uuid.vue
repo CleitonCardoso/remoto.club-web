@@ -61,7 +61,7 @@
                     label="Faixa salarial"
                     name="description"
                     type="number"
-                    :rules="notEmptyRule"
+                    :rules="salaryRules"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -118,6 +118,7 @@ export default {
         title: null,
         contractType: null,
         experienceRequired: null,
+        compensationType: null,
         description: null,
         salary: null,
       },
@@ -144,6 +145,29 @@ export default {
       },
       notEmptyRule: [(v) => !!v || 'O campo precisa ser preenchido!'],
     }
+  },
+  computed: {
+    salaryRules() {
+      return [
+        (v) => !!v || 'O campo precisa ser preenchido!',
+        (v) => {
+          debugger
+          let result = false
+          switch (this.job.compensationType) {
+            case 'PER_HOUR':
+              result = v > 0 && v < 600
+              break
+            case 'PER_MONTH':
+              result = v >= 600 && v < 30000
+              break
+            case 'PER_YEAR':
+              result = v >= 30000
+              break
+          }
+          return result || 'Valor inválido'
+        },
+      ]
+    },
   },
   mounted() {
     this.loadJob()
