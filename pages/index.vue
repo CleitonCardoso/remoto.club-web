@@ -116,7 +116,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-btn dark block grey @click="apply(job.uuid)">
-                  Candatar-se com o LinkedIn
+                  Candatar-se
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -250,6 +250,7 @@ export default {
           this.$refs['message-alert'].showAlert()
         })
     },
+
     removeKeyWords(item) {
       this.filter.keyWords.splice(this.filter.keyWords.indexOf(item), 1)
       this.filter.keyWords = [...this.filter.keyWords]
@@ -280,8 +281,10 @@ export default {
       }
     },
     apply(jobUuid) {
-      this.jobUuid = jobUuid
-      this.applyModal = true
+      if (this.$auth.loggedIn) {
+        this.jobUuid = jobUuid
+        this.applyModal = true
+      } else this.$router.push('/login')
     },
     async confirmApply() {
       const params = {}
@@ -310,6 +313,7 @@ export default {
           this.$refs['message-alert'].showAlert()
         })
     },
+
     cancelApply() {
       this.applyModal = false
     },
