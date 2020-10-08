@@ -225,14 +225,16 @@ export default {
     create() {
       const valid = this.$refs.register_form.validate()
       if (valid) {
+        let createPath = '/login/create'
+        if (this.linkedInCode) {
+          createPath +=
+            '?linkedInCode=' +
+            this.linkedInCode +
+            '&redirectUri=' +
+            this.redirectUri
+        }
         this.$api
-          .post(
-            '/login/create?linkedInCode=' +
-              this.linkedInCode +
-              '&redirectUri=' +
-              this.redirectUri,
-            this.login
-          )
+          .post(createPath, this.login)
           .then((resp) => {
             this.$router.push('/login')
           })
