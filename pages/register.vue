@@ -233,6 +233,9 @@ export default {
             '&redirectUri=' +
             this.redirectUri
         }
+
+        this.login.role = this.registrationType
+
         if (this.registrationType === 'CANDIDATE') {
           this.login.tenant = null
         }
