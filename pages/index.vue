@@ -115,7 +115,15 @@
                 </div>
               </v-card-text>
               <v-card-actions>
-                <v-btn dark block grey @click="apply(job.uuid)">
+                <v-btn
+                  v-if="
+                    !$auth.loggedIn || $auth.$state.user.role === 'CANDIDATE'
+                  "
+                  dark
+                  block
+                  grey
+                  @click="apply(job.uuid)"
+                >
                   Candatar-se
                 </v-btn>
               </v-card-actions>
@@ -221,7 +229,6 @@ export default {
       this.load()
     },
     async load() {
-      debugger
       this.loading = true
       const params = this.filter
       params['page-index'] = this.pageIndex

@@ -233,6 +233,10 @@ export default {
             '&redirectUri=' +
             this.redirectUri
         }
+        if (this.registrationType === 'CANDIDATE') {
+          this.login.tenant = null
+        }
+
         this.$api
           .post(createPath, this.login)
           .then((resp) => {
