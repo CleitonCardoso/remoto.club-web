@@ -151,7 +151,6 @@ export default {
       return [
         (v) => !!v || 'O campo precisa ser preenchido!',
         (v) => {
-          debugger
           let result = false
           switch (this.job.compensationType) {
             case 'PER_HOUR':

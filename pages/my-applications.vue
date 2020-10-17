@@ -110,21 +110,14 @@
                   >
                 </div>
 
-                <div v-if="true" class="my-4">
+                <div class="my-4">
                   <p style="white-space: pre-wrap;">{{ job.description }}</p>
                 </div>
               </v-card-text>
               <v-card-actions>
-                <v-btn
-                  v-if="
-                    !$auth.loggedIn || $auth.$state.user.role === 'CANDIDATE'
-                  "
-                  dark
-                  block
-                  grey
-                  @click="apply(job.uuid)"
-                >
-                  Candatar-se
+                <v-spacer></v-spacer>
+                <v-btn dark grey @click="openCandidates(job.uuid)">
+                  Ver candidatura
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -139,35 +132,6 @@
         ></v-pagination>
       </v-flex>
     </v-layout>
-    <v-dialog v-model="applyModal" width="500" dark color="black darken-1">
-      <v-card dark color="black darken-1">
-        <v-card-title>
-          Aplicar à vaga
-        </v-card-title>
-
-        <v-card-text>
-          <v-text-field
-            v-model="linkedInUrl"
-            label="Url do perfil do LinkedIn"
-            name="Perfil do LinkedIn"
-            prepend-icon="mdi-linkedin"
-            type="text"
-          ></v-text-field>
-        </v-card-text>
-
-        <v-divider></v-divider>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn dark grey @click="cancelApply">
-            Cancelar
-          </v-btn>
-          <v-btn dark grey @click="confirmApply">
-            Confirmar
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </v-container>
 </template>
 <script>
@@ -182,6 +146,7 @@ const brlFormatter = new Intl.NumberFormat('pt-BR', {
 
 export default {
   layout: 'search',
+  middleware: 'auth',
   components: { ErrorAlert },
   data() {
     return {
@@ -189,8 +154,6 @@ export default {
       loading: false,
       pageIndex: 1,
       resultSize: 10,
-      applyModal: false,
-      linkedInUrl: '',
       jobs: [],
       filter: {
         keyWords: [],
@@ -216,9 +179,6 @@ export default {
     }
   },
   mounted() {
-    this.filter.keyWords = this.$route.query.keyWords
-    this.filter.contractTypes = this.$route.query.contractTypes
-    this.filter.experienceTypes = this.$route.query.experienceTypes
     this.load()
   },
   methods: {
@@ -237,15 +197,11 @@ export default {
       params['result-size'] = 10
 
       await this.$api
-        .get(`public/jobs`, { params })
+        .get(`private/my-applications`, { params })
         .then((res) => {
           this.jobs = res.data.content
           this.loading = false
           this.resultSize = res.data.totalPages
-
-          this.jobs.forEach((element) => {
-            this.$set(element, 'showDescription', false)
-          })
         })
         .catch((err) => {
           let message = 'Houve um erro inesperado.'
@@ -259,7 +215,6 @@ export default {
           this.$refs['message-alert'].showAlert()
         })
     },
-
     removeKeyWords(item) {
       this.filter.keyWords.splice(this.filter.keyWords.indexOf(item), 1)
       this.filter.keyWords = [...this.filter.keyWords]
@@ -289,36 +244,8 @@ export default {
         }
       }
     },
-    apply(jobUuid) {
-      if (this.$auth.loggedIn) {
-        this.confirmApply(jobUuid)
-      } else this.$router.push('/login')
-    },
-    async confirmApply(jobUuid) {
-      await this.$api
-        .post(`private/jobs/` + jobUuid + `/apply`)
-        .then((res) => {
-          this.notification.title = 'Feito'
-          this.notification.description = 'Você aplicou para esta vaga!'
-          this.notification.type = 'success'
-          this.$refs['message-alert'].showAlert()
-          this.applyModal = false
-        })
-        .catch((err) => {
-          let message = 'Houve um erro inesperado.'
-          if (err.response && err.response.status === 400) {
-            message = err.response.data.message
-          }
-
-          this.notification.title = 'Erro'
-          this.notification.description = message || ''
-          this.notification.type = 'error'
-          this.$refs['message-alert'].showAlert()
-        })
-    },
-
-    cancelApply() {
-      this.applyModal = false
+    openCandidates(uuid) {
+      this.$router.push('/candidates/' + uuid)
     },
   },
 }

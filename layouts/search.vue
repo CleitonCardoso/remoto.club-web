@@ -104,16 +104,32 @@ export default {
   computed: {},
   mounted() {
     if (this.$auth.loggedIn) {
-      this.items = [
-        { icon: 'create', text: 'Adicionar uma vaga', to: '/job' },
-        { icon: 'list', text: 'Ver minhas vagas', to: '/my-jobs' },
-        { divider: true },
-        { icon: 'mdi-account-circle', text: 'Meu perfil', to: '/my-profile' },
-        { icon: 'mdi-cog', text: 'Configurações', to: '/configs' },
-        { icon: 'mdi-lightbulb-on', text: 'Sugestões', to: '/sac' },
-        { divider: true },
-        { icon: 'mdi-logout', text: 'Sair', exit: true },
-      ]
+      if (this.$auth.user.role === 'COMPANY') {
+        this.items = [
+          { icon: 'create', text: 'Adicionar uma vaga', to: '/job' },
+          { icon: 'list', text: 'Ver minhas vagas', to: '/my-jobs' },
+          { divider: true },
+          { icon: 'mdi-account-circle', text: 'Meu perfil', to: '/my-profile' },
+          { icon: 'mdi-cog', text: 'Configurações', to: '/configs' },
+          { icon: 'mdi-lightbulb-on', text: 'Sugestões', to: '/sac' },
+          { divider: true },
+          { icon: 'mdi-logout', text: 'Sair', exit: true },
+        ]
+      }
+      if (this.$auth.user.role === 'CANDIDATE') {
+        this.items = [
+          {
+            icon: 'list',
+            text: 'Ver minhas aplicações',
+            to: '/my-applications',
+          },
+          { divider: true },
+          { icon: 'mdi-account-circle', text: 'Meu perfil', to: '/my-profile' },
+          { icon: 'mdi-lightbulb-on', text: 'Sugestões', to: '/sac' },
+          { divider: true },
+          { icon: 'mdi-logout', text: 'Sair', exit: true },
+        ]
+      }
     } else {
       this.items = [{ icon: 'mdi-login', text: 'Entrar', to: '/login' }]
     }

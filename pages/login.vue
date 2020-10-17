@@ -109,7 +109,7 @@ export default {
         this.$auth
           .loginWith('local', { data: { username, password } })
           .then((response) => {
-            this.$router.push('/')
+            this.$router.push('/vagas')
           })
           .catch((e) => {
             let description = 'Servidor indisponível'
