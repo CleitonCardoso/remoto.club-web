@@ -124,7 +124,7 @@
                   grey
                   @click="apply(job.uuid)"
                 >
-                  Candatar-se
+                  Candidatar-se
                 </v-btn>
               </v-card-actions>
             </v-card>
