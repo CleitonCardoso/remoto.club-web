@@ -13,21 +13,21 @@
           transform: scale(1.1);
         "
       /> -->
-      <section>
+      <section class="mb-10">
         <v-layout column align-center style="overflow: hidden;">
           <v-flex xs12 md4>
             <v-card class="elevation-0 transparent text-center" dark>
               <v-card-title class="layout justify-center">
                 <div style="height: 50%; margin-top: 15%;">
-                  <span style="text-shadow: 3px 2px #000000; font-size: 7rem;">
+                  <span style="text-shadow: 3px 2px #000000; font-size: 10vw;">
                     Remoto.<span class="font-weight-light">Club</span>
                   </span>
                 </div>
               </v-card-title>
               <v-card-text style="text-center">
                 <span
-                  class="text-h5 white--text font-weight-bold"
-                  style="text-shadow: 1.5px 1px #000000;"
+                  class="white--text font-weight-bold"
+                  style="text-shadow: 1.5px 1px #000000; font-size: 200%;"
                 >
                   O seu site de classificados de vagas HomeOffice para TI.
                   Simples e direto.
@@ -51,7 +51,6 @@
           </v-flex>
         </v-layout>
       </section>
-
       <section>
         <v-container grid-list-xl>
           <v-layout justify-center row wrap class="my-5">
