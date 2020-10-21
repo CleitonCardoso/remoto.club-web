@@ -1,5 +1,5 @@
 <template>
-  <v-footer>
+  <v-footer absolute>
     <v-flex class="text-center align-center">
       <a
         href="http://cleitoncardoso.com"

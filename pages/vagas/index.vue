@@ -124,7 +124,7 @@
                   grey
                   @click="apply(job.uuid)"
                 >
-                  Candidatar-se
+                  Candatar-se
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -135,6 +135,7 @@
           v-model="pageIndex"
           dark
           :length="resultSize"
+          class="mb-10"
           @input="nextPage"
         ></v-pagination>
       </v-flex>

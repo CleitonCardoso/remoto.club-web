@@ -1,325 +1,216 @@
 <template>
-  <v-container>
-    <v-layout row wrap>
-      <ErrorAlert ref="message-alert" :notification="notification"></ErrorAlert>
-      <v-flex class="align-start">
-        <v-card dark color="black darken-1">
-          <v-card-title>
-            <v-combobox
-              v-model="filter.keyWords"
-              chips
-              clearable
-              hide-details
-              label="Pesquise por palavras chave"
-              prepend-inner-icon="search"
-              multiple
-              solo
-              append-icon=""
-              @click="expand = true"
-            >
-              <template v-slot:selection="{ attrs, item, select, selected }">
-                <v-chip
-                  v-bind="attrs"
-                  :input-value="selected"
-                  close
-                  @click="select"
-                  @click:close="removeKeyWords(item)"
+  <v-main>
+    <div class="back"></div>
+    <v-container fluid pa-0>
+      <!-- <img
+        :src="'/landing/' + number + '.jpg'"
+        style="
+          max-width: 100%;
+          max-height: 100%;
+          position: absolute;
+          filter: blur(10px);
+          -webkit-filter: blur(10px);
+          transform: scale(1.1);
+        "
+      /> -->
+      <section>
+        <v-layout column align-center style="overflow: hidden;">
+          <v-flex xs12 md4>
+            <v-card class="elevation-0 transparent text-center" dark>
+              <v-card-title class="layout justify-center">
+                <div style="height: 50%; margin-top: 15%;">
+                  <span style="text-shadow: 3px 2px #000000; font-size: 7rem;">
+                    Remoto.<span class="font-weight-light">Club</span>
+                  </span>
+                </div>
+              </v-card-title>
+              <v-card-text style="text-center">
+                <span
+                  class="text-h5 white--text font-weight-bold"
+                  style="text-shadow: 1.5px 1px #000000;"
                 >
-                  <strong>{{ item }}</strong
-                  >&nbsp;
-                </v-chip>
-              </template>
-            </v-combobox>
-          </v-card-title>
-          <v-expand-transition>
-            <v-card-text v-show="expand">
-              <v-row>
-                <v-col cols="12" sm="6">
-                  <v-select
-                    v-model="filter.contractTypes"
-                    :items="contractTypes"
-                    label="Tipo de contrato"
-                    item-text="text"
-                    item-value="value"
-                    dark
-                    multiple
-                    solo
-                    dense
-                  ></v-select>
-                </v-col>
-                <v-col cols="12" sm="6">
-                  <v-select
-                    v-model="filter.experienceTypes"
-                    :items="experienceTypes"
-                    label="Experiência"
-                    item-text="text"
-                    item-value="value"
-                    dark
-                    multiple
-                    solo
-                    dense
-                  ></v-select>
-                </v-col>
-              </v-row>
-
-              <v-card-actions>
-                <v-btn dark block grey @click="search">
-                  Pesquisar
-                </v-btn>
-              </v-card-actions>
-            </v-card-text>
-          </v-expand-transition>
-        </v-card>
-
-        <v-divider class="mt-5 mb-5"></v-divider>
-
-        <v-pagination
-          v-if="this.jobs.length > 0"
-          v-model="pageIndex"
-          dark
-          :length="resultSize"
-          @input="nextPage"
-        ></v-pagination>
-
-        <div v-if="this.loading" class="text-center ma-5">
-          <v-progress-circular
-            :size="100"
-            :width="10"
-            indeterminate
-            dark
-          ></v-progress-circular>
-        </div>
-
-        <v-row v-for="(job, index) in jobs" :key="`job-${index}`">
-          <v-col>
-            <v-card dark color="black darken-1" elevation="5">
-              <v-card-title
-                >{{ job.title }} - {{ job.contractType }}</v-card-title
-              >
-              <v-card-subtitle>{{ job.company }}</v-card-subtitle>
-              <v-card-text>
-                <div class="subtitle-1">
-                  Nível: <strong>{{ job.experienceRequired }}</strong>
-                </div>
-                <div class="subtitle-1">
-                  Faixa salarial:
-                  <strong>
-                    {{
-                      format(job.salary) + '/' + getCompensationTypeLabel(job)
-                    }}</strong
-                  >
-                </div>
-
-                <div v-if="true" class="my-4">
-                  <p style="white-space: pre-wrap;">{{ job.description }}</p>
-                </div>
+                  O seu site de classificados de vagas HomeOffice para TI.
+                  Simples e direto.
+                </span>
+                <br />
+                <br />
+                <v-row>
+                  <v-col>
+                    <v-btn dark large block to="/vagas">
+                      Procuro um emprego
+                    </v-btn>
+                  </v-col>
+                  <v-col>
+                    <v-btn dark large block to="/login">
+                      Procuro um profissional
+                    </v-btn>
+                  </v-col>
+                </v-row>
               </v-card-text>
-              <v-card-actions>
-                <v-btn
-                  v-if="
-                    !$auth.loggedIn || $auth.$state.user.role === 'CANDIDATE'
-                  "
-                  dark
-                  block
-                  grey
-                  @click="apply(job.uuid)"
-                >
-                  Candidatar-se
-                </v-btn>
-              </v-card-actions>
             </v-card>
-          </v-col>
-        </v-row>
-        <v-pagination
-          v-if="this.jobs.length > 0"
-          v-model="pageIndex"
-          dark
-          :length="resultSize"
-          @input="nextPage"
-        ></v-pagination>
-      </v-flex>
-    </v-layout>
-    <v-dialog v-model="applyModal" width="500" dark color="black darken-1">
-      <v-card dark color="black darken-1">
-        <v-card-title>
-          Aplicar à vaga
-        </v-card-title>
+          </v-flex>
+        </v-layout>
+      </section>
 
-        <v-card-text>
-          <v-text-field
-            v-model="linkedInUrl"
-            label="Url do perfil do LinkedIn"
-            name="Perfil do LinkedIn"
-            prepend-icon="mdi-linkedin"
-            type="text"
-          ></v-text-field>
-        </v-card-text>
+      <section>
+        <v-container grid-list-xl>
+          <v-layout justify-center row wrap class="my-5">
+            <v-flex xs12 md4>
+              <v-card
+                class="elevation-0 text-center"
+                style="background-color: rgba(0, 0, 0, 0.8);"
+                dark
+              >
+                <v-card-title primary-title class="layout">
+                  <v-flex class="text-center">
+                    <v-label>
+                      <v-icon style="font-size: 8vh;">device_hub</v-icon>
+                    </v-label>
 
-        <v-divider></v-divider>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn dark grey @click="cancelApply">
-            Cancelar
-          </v-btn>
-          <v-btn dark grey @click="confirmApply">
-            Confirmar
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-container>
+                    <div style="font-size: 3vh;">
+                      Um novo hub de profissionais de TI
+                    </div>
+                  </v-flex>
+                </v-card-title>
+                <v-card-text>
+                  Profissionais de diferentes especialidades, habilidades e
+                  expectativas de vida em busca de
+                  <strong>boas oportunidades de trabalho</strong>.
+                </v-card-text>
+              </v-card>
+            </v-flex>
+            <v-flex xs12 md4>
+              <v-card
+                class="elevation-0"
+                style="background-color: rgba(0, 0, 0, 0.8);"
+                dark
+              >
+                <v-card-title primary-title class="layout text-center">
+                  <v-flex class="text-center">
+                    <v-label>
+                      <v-icon style="font-size: 8vh;">house</v-icon>
+                    </v-label>
+                    <div style="font-size: 3vh;">
+                      Uma nova forma de trabalhar
+                    </div>
+                  </v-flex>
+                </v-card-title>
+                <v-card-text class="text-center">
+                  A pandemia mundial mostrou para o mundo que
+                  <strong>o nosso lar</strong> pode sim ser
+                  <strong>o melhor escritório que poderíamos ter</strong> e
+                  ainda trazer <strong>aumento na produtividade</strong>.
+                  Levantamos a bandeira do
+                  <strong>HomeOffice, ou trabalho remoto</strong> e focamos
+                  apenas em vagas dessa natureza.
+                </v-card-text>
+              </v-card>
+            </v-flex>
+            <v-flex xs12 md4>
+              <v-card
+                class="elevation-0"
+                style="background-color: rgba(0, 0, 0, 0.8);"
+                dark
+              >
+                <v-card-title primary-title class="layout text-center">
+                  <v-flex class="text-center">
+                    <v-label>
+                      <v-icon style="font-size: 8vh;">money_off</v-icon>
+                    </v-label>
+                    <div style="font-size: 3vh;">Gratuito!</div>
+                  </v-flex>
+                </v-card-title>
+                <v-card-text class="text-center">
+                  Pra quem anuncia uma
+                  <strong>oportunidade fantástica</strong> e pra quem procura
+                  uma <strong>vaga certeira</strong>.
+                </v-card-text>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </section>
+    </v-container>
+    <Footer></Footer>
+  </v-main>
 </template>
-<script>
-import ErrorAlert from '~/components/ErrorAlert'
 
-const brlFormatter = new Intl.NumberFormat('pt-BR', {
-  style: 'currency',
-  currency: 'BRL',
-  maximumFractionDigits: 2,
-  unitDisplay: 'short',
-})
+<script>
+import Footer from '~/components/Footer'
 
 export default {
-  layout: 'search',
-  components: { ErrorAlert },
+  layout: 'clean',
+  components: {
+    Footer,
+  },
   data() {
     return {
-      expand: false,
-      loading: false,
-      pageIndex: 1,
-      resultSize: 10,
-      applyModal: false,
-      linkedInUrl: '',
-      jobs: [],
-      filter: {
-        keyWords: [],
-        contractTypes: [],
-        experienceTypes: [],
+      number: 4,
+      title: 'Endorfine',
+      imageLink: {
+        main: '/landing/2.jpg',
+        sub_main: '/landing/3.jpg',
+        logo: '/landing/1.jpg',
+        social_cover: '/landing/1.jpg',
       },
-      contractTypes: [
-        { text: 'CLT', value: 'CLT' },
-        { text: 'PJ', value: 'PJ' },
+      email: '',
+      emailRules: [
+        (v) => {
+          return !!v || 'E-mail is required'
+        },
+        (v) =>
+          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+          'E-mail must be valid',
       ],
-      experienceTypes: [
-        { text: 'Júnior', value: 'JUNIOR' },
-        { text: 'Pleno', value: 'PLENO' },
-        { text: 'Sênior', value: 'SENIOR' },
-        { text: 'Especialista', value: 'ESPECIALISTA' },
-      ],
-      snackbar: false,
-      notification: {
-        title: '',
-        description: '',
-        type: '',
-      },
+      subscribed: false,
     }
   },
+  computed: {},
   mounted() {
-    this.filter.keyWords = this.$route.query.keyWords
-    this.filter.contractTypes = this.$route.query.contractTypes
-    this.filter.experienceTypes = this.$route.query.experienceTypes
-    this.load()
+    debugger
+    console.log(this.$vuetify.breakpoint)
   },
   methods: {
-    nextPage(pageNumber) {
-      this.pageIndex = pageNumber
-      this.load()
-    },
-    search() {
-      this.pageIndex = 1
-      this.load()
-    },
-    async load() {
-      this.loading = true
-      const params = this.filter
-      params['page-index'] = this.pageIndex
-      params['result-size'] = 10
-
-      await this.$api
-        .get(`public/jobs`, { params })
-        .then((res) => {
-          this.jobs = res.data.content
-          this.loading = false
-          this.resultSize = res.data.totalPages
-
-          this.jobs.forEach((element) => {
-            this.$set(element, 'showDescription', false)
-          })
-        })
-        .catch((err) => {
-          let message = 'Houve um erro inesperado.'
-          if (err.response && err.response.status === 400) {
-            message = err.response.data.message
-          }
-
-          this.notification.title = 'Erro'
-          this.notification.description = message
-          this.notification.type = 'error'
-          this.$refs['message-alert'].showAlert()
-        })
-    },
-
-    removeKeyWords(item) {
-      this.filter.keyWords.splice(this.filter.keyWords.indexOf(item), 1)
-      this.filter.keyWords = [...this.filter.keyWords]
-    },
-    format(value) {
-      return brlFormatter.format(value)
-    },
-    getCompensationTypeLabel(job) {
-      if (job.compensationType) {
-        switch (job.compensationType) {
-          case 'PER_HOUR':
-            return 'hora'
-          case 'PER_MONTH':
-            return 'mês'
-          case 'PER_YEAR':
-            return 'ano'
-        }
-      } else {
-        if (job.salary >= 0 && job.salary < 600) {
-          return 'hora'
-        }
-        if (job.salary >= 600 && job.salary < 30000) {
-          return 'mês'
-        }
-        if (job.salary >= 30000) {
-          return 'ano'
-        }
-      }
-    },
-    apply(jobUuid) {
-      if (this.$auth.loggedIn) {
-        this.confirmApply(jobUuid)
-      } else this.$router.push('/login')
-    },
-    async confirmApply(jobUuid) {
-      await this.$api
-        .post(`private/jobs/` + jobUuid + `/apply`)
-        .then((res) => {
-          this.notification.title = 'Feito'
-          this.notification.description = 'Você aplicou para esta vaga!'
-          this.notification.type = 'success'
-          this.$refs['message-alert'].showAlert()
-          this.applyModal = false
-        })
-        .catch((err) => {
-          let message = 'Houve um erro inesperado.'
-          if (err.response && err.response.status === 400) {
-            message = err.response.data.message
-          }
-
-          this.notification.title = 'Erro'
-          this.notification.description = message || ''
-          this.notification.type = 'error'
-          this.$refs['message-alert'].showAlert()
-        })
-    },
-
-    cancelApply() {
-      this.applyModal = false
+    subscribe() {
+      this.subscribed = !this.subscribed
     },
   },
 }
 </script>
+
+<style>
+body {
+  word-break: keep-all;
+}
+
+.back {
+  position: fixed;
+  display: block;
+  left: 0;
+  right: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/landing/4.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+}
+#inspire {
+  background: none;
+}
+.finedTitle {
+  font-weight: 900;
+  text-shadow: 2px 2px #000000;
+}
+
+.social-icon {
+  font-size: 21px;
+  color: white;
+}
+</style>
