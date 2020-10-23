@@ -220,6 +220,7 @@ export default {
   },
   mounted() {
     this.linkedInCode = this.$route.query.code
+    this.partnerCode = this.$route.query.partnerCode
   },
   methods: {
     create() {
@@ -231,7 +232,11 @@ export default {
             '?linkedInCode=' +
             this.linkedInCode +
             '&redirectUri=' +
-            this.redirectUri
+            this.redirectUri +
+            '&partnerCode=' +
+            this.partnerCode
+        } else if (this.partnerCode) {
+          createPath += '?partnerCode=' + this.partnerCode
         }
 
         this.login.role = this.registrationType

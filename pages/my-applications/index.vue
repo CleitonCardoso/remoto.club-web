@@ -116,7 +116,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn dark grey @click="openCandidates(job.uuid)">
+                <v-btn dark grey @click="openApplication(job.uuid)">
                   Ver candidatura
                 </v-btn>
               </v-card-actions>
@@ -244,8 +244,8 @@ export default {
         }
       }
     },
-    openCandidates(uuid) {
-      this.$router.push('/candidates/' + uuid)
+    openApplication(uuid) {
+      this.$router.push('/my-applications/' + uuid)
     },
   },
 }
