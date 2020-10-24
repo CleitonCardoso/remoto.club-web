@@ -60,7 +60,7 @@ export default {
       {
         hid: 'twitter:image',
         name: 'twitter:image',
-        content: '/landing/12.jpg',
+        content: 'https://www.remoto.club/landing/12.jpg',
       },
       {
         hid: 'description',
@@ -71,7 +71,7 @@ export default {
       {
         hid: 'og:image',
         property: 'og:image',
-        content: '/landing/12.jpg',
+        content: 'https://www.remoto.club/landing/12.jpg',
       },
       {
         hid: 'og:site_name',
