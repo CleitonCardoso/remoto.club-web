@@ -60,7 +60,7 @@ export default {
       {
         hid: 'twitter:image',
         name: 'twitter:image',
-        content: '/static/landing/12.jpg',
+        content: '/landing/12.jpg',
       },
       {
         hid: 'description',
@@ -71,7 +71,7 @@ export default {
       {
         hid: 'og:image',
         property: 'og:image',
-        content: '/static/landing/12.jpg',
+        content: '/landing/12.jpg',
       },
       {
         hid: 'og:site_name',
