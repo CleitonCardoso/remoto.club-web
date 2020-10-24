@@ -55,25 +55,23 @@ export default {
         hid: 'twitter:description',
         name: 'twitter:description',
         content:
-          'Simples, direto e reto. O seu site de vagas HomeOffice para TI.',
+          'O seu site de classificados de vagas HomeOffice para TI.  Simples e direto.',
       },
       {
         hid: 'twitter:image',
         name: 'twitter:image',
-        content:
-          'https://images.pexels.com/photos/4050320/pexels-photo-4050320.jpeg',
+        content: '/static/landing/12.jpg',
       },
       {
         hid: 'description',
         name: 'description',
         content:
-          'Simples, direto e reto. O seu site de vagas HomeOffice para TI.',
+          'O seu site de classificados de vagas HomeOffice para TI.  Simples e direto.',
       },
       {
         hid: 'og:image',
         property: 'og:image',
-        content:
-          'https://images.pexels.com/photos/4050320/pexels-photo-4050320.jpeg',
+        content: '/static/landing/12.jpg',
       },
       {
         hid: 'og:site_name',
@@ -85,7 +83,7 @@ export default {
         hid: 'og:description',
         name: 'og:description',
         content:
-          'Simples, direto e reto. O seu site de vagas HomeOffice para TI.',
+          'O seu site de classificados de vagas HomeOffice para TI.  Simples e direto.',
       },
     ],
     link: [
