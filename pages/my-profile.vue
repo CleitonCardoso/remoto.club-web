@@ -31,6 +31,14 @@
                 :rules="notEmptyRule"
                 type="text"
               ></v-text-field>
+              <v-text-field
+                v-if="$auth.$state.user.role === 'CANDIDATE'"
+                v-model="appUser.login.candidate.linkedInUrl"
+                label="Link do perfil do LinkedIn"
+                name="linkedin"
+                :rules="notEmptyRule"
+                type="text"
+              ></v-text-field>
 
               <v-text-field
                 v-model="appUser.login.email"
@@ -44,7 +52,14 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn dark class="mr-3" to="/my-jobs">Cancelar</v-btn>
+            <v-btn
+              dark
+              class="mr-3"
+              :to="
+                $auth.$state.user.role === 'CANDIDATE' ? '/vagas' : '/my-jobs'
+              "
+              >Cancelar</v-btn
+            >
             <v-btn dark class="mr-3" @click="save">Salvar</v-btn>
           </v-card-actions>
         </v-card>
@@ -84,6 +99,9 @@ export default {
         login: {
           username: '',
           email: '',
+          candidate: {
+            linkedInUrl: '',
+          },
         },
       },
       snackbar: false,

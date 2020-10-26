@@ -22,6 +22,19 @@
               :items-per-page="20"
               class="elevation-1"
             >
+              <template v-slot:[`item.actions`]="{ item }">
+                <v-select
+                  v-model="select"
+                  :items="items"
+                  item-text="state"
+                  item-value="abbr"
+                  label="Select"
+                  persistent-hint
+                  return-object
+                  single-line
+                ></v-select>
+              </template>
+
               <template v-slot:[`item.linkedInUrl`]="{ item }">
                 <a :href="item.linkedInUrl" target="_blank">
                   {{ item.linkedInUrl }}
@@ -52,6 +65,7 @@ export default {
       headers: [
         { text: 'Nome', value: 'name' },
         { text: 'Url linkedin', value: 'linkedInUrl' },
+        { text: 'Ações', value: 'actions', sortable: false },
       ],
       notification: {
         title: '',

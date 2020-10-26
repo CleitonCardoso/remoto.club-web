@@ -80,8 +80,8 @@ export default {
         password: '',
       },
       notification: {
-        title: 'teste',
-        description: 'desc',
+        title: '',
+        description: '',
       },
       recoverPassEmail: '',
       notEmptyRule: [(v) => !!v || 'O campo precisa ser preenchido!'],
@@ -109,7 +109,11 @@ export default {
         this.$auth
           .loginWith('local', { data: { username, password } })
           .then((response) => {
-            this.$router.push('/vagas')
+            this.$router.push(
+              this.$auth.$state.user.role === 'CANDIDATE'
+                ? '/vagas'
+                : '/my-jobs'
+            )
           })
           .catch((e) => {
             let description = 'Servidor indisponível'
@@ -135,7 +139,9 @@ export default {
       this.$auth
         .loginWith('local', { data: { linkedInCode, redirectUri } })
         .then((response) => {
-          this.$router.push('/')
+          this.$router.push(
+            this.$auth.$state.user.role === 'CANDIDATE' ? '/vagas' : '/my-jobs'
+          )
         })
         .catch((e) => {
           let description = 'Servidor indisponível'

@@ -34,9 +34,7 @@
 
     <v-stepper-items>
       <v-stepper-content step="1">
-        <v-card height="200px">
-          teste
-        </v-card>
+        <v-card height="200px"> </v-card>
       </v-stepper-content>
 
       <v-stepper-content step="2">
