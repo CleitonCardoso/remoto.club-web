@@ -106,11 +106,20 @@
                 <v-text-field
                   v-if="loginAndPasswordRegistration"
                   v-model="login.password"
-                  label="Password"
+                  label="Senha"
                   name="password"
                   prepend-icon="mdi-lock"
                   type="password"
                   :rules="notEmptyRule"
+                ></v-text-field>
+
+                <v-text-field
+                  v-if="loginAndPasswordRegistration"
+                  label="Confirmação de senha"
+                  name="password"
+                  prepend-icon="mdi-lock-plus"
+                  type="password"
+                  :rules="passwordMatchRule"
                 ></v-text-field>
 
                 <v-text-field
@@ -193,6 +202,9 @@ export default {
         type: '',
       },
       notEmptyRule: [(v) => !!v || 'O campo precisa ser preenchido!'],
+      passwordMatchRule: [
+        (v) => !v || v === this.login.password || 'Senhas não correspondem!',
+      ],
       emailRules: [
         (v) =>
           !v ||

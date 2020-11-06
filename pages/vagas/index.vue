@@ -146,14 +146,13 @@
           Aplicar à vaga
         </v-card-title>
 
-        <v-card-text>
-          <v-text-field
-            v-model="linkedInUrl"
-            label="Url do perfil do LinkedIn"
-            name="Perfil do LinkedIn"
-            prepend-icon="mdi-linkedin"
-            type="text"
-          ></v-text-field>
+        <v-card-text v-if="this.$auth.loggedIn">
+          Confirmar aplicação?
+        </v-card-text>
+
+        <v-card-text v-if="!this.$auth.loggedIn">
+          Para aplicar-se à vaga você <strong>precisa estar logado</strong>,
+          clique no botão de login para ser redirecionado.
         </v-card-text>
 
         <v-divider></v-divider>
@@ -163,8 +162,17 @@
           <v-btn dark grey @click="cancelApply">
             Cancelar
           </v-btn>
-          <v-btn dark grey @click="confirmApply">
+          <v-btn
+            v-if="this.$auth.loggedIn"
+            dark
+            class="green"
+            @click="confirmApply(selectedJobUuid)"
+          >
             Confirmar
+          </v-btn>
+
+          <v-btn v-if="!this.$auth.loggedIn" dark class="green" to="/login">
+            Login
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -192,6 +200,7 @@ export default {
       resultSize: 10,
       applyModal: false,
       linkedInUrl: '',
+      selectedJobUuid: null,
       jobs: [],
       filter: {
         keyWords: [],
@@ -291,9 +300,8 @@ export default {
       }
     },
     apply(jobUuid) {
-      if (this.$auth.loggedIn) {
-        this.confirmApply(jobUuid)
-      } else this.$router.push('/login')
+      this.selectedJobUuid = jobUuid
+      this.applyModal = true
     },
     async confirmApply(jobUuid) {
       await this.$api
@@ -315,6 +323,7 @@ export default {
           this.notification.description = message || ''
           this.notification.type = 'error'
           this.$refs['message-alert'].showAlert()
+          this.applyModal = false
         })
     },
 
