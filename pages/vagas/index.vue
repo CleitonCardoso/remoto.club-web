@@ -310,6 +310,7 @@ export default {
     nextPage(pageNumber) {
       this.pageIndex = pageNumber
       this.load()
+      window.scrollTo(0, 0)
     },
     search() {
       this.pageIndex = 1
