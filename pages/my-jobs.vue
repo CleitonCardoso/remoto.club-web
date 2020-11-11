@@ -92,7 +92,13 @@
 
         <v-row v-for="(job, index) in jobs" :key="`job-${index}`">
           <v-col>
-            <v-card dark color="black darken-1" elevation="5">
+            <v-card
+              dark
+              :color="
+                job.jobStatus === 'CLOSED' ? 'grey darken-1' : 'black darken-1'
+              "
+              elevation="5"
+            >
               <v-card-title
                 >{{ job.title }} - {{ job.contractType }}</v-card-title
               >
@@ -122,11 +128,32 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn dark grey @click="edit(job.uuid)">
+                <v-btn
+                  dark
+                  grey
+                  :disabled="job.jobStatus === 'CLOSED'"
+                  @click="edit(job.uuid)"
+                >
                   Editar
                 </v-btn>
                 <v-btn dark grey @click="openCandidates(job.uuid)">
                   Ver candidatos
+                </v-btn>
+                <v-btn
+                  v-if="job.jobStatus !== 'CLOSED'"
+                  dark
+                  grey
+                  @click="closeJob(job.uuid)"
+                >
+                  Fechar vaga
+                </v-btn>
+                <v-btn
+                  v-if="job.jobStatus === 'CLOSED'"
+                  dark
+                  grey
+                  @click="reopenJob(job.uuid)"
+                >
+                  Reabrir vaga
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -258,6 +285,40 @@ export default {
     },
     openCandidates(uuid) {
       this.$router.push('/candidates/' + uuid)
+    },
+    closeJob(uuid) {
+      this.$api
+        .post(`private/my-jobs/close/` + uuid)
+        .then((res) => {
+          this.load()
+        })
+        .catch((err) => {
+          let message = 'Houve um erro inesperado.'
+          if (err.response && err.response.status === 400) {
+            message = err.response.data.message
+          }
+
+          this.notification.title = 'Erro'
+          this.notification.description = message
+          this.$refs['message-alert'].showAlert()
+        })
+    },
+    reopenJob(uuid) {
+      this.$api
+        .post(`private/my-jobs/reopen/` + uuid)
+        .then((res) => {
+          this.load()
+        })
+        .catch((err) => {
+          let message = 'Houve um erro inesperado.'
+          if (err.response && err.response.status === 400) {
+            message = err.response.data.message
+          }
+
+          this.notification.title = 'Erro'
+          this.notification.description = message
+          this.$refs['message-alert'].showAlert()
+        })
     },
   },
 }

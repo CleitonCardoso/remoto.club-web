@@ -69,7 +69,7 @@
                   <v-text-field
                     v-model="job.salary"
                     label="Faixa salarial mínima"
-                    name="description"
+                    name="salary"
                     type="number"
                     :rules="salaryRules"
                   ></v-text-field>

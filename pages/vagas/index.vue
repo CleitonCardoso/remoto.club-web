@@ -94,8 +94,25 @@
           <v-col>
             <v-card dark color="black darken-1" elevation="5">
               <v-card-title
-                >{{ job.title }} - {{ job.contractType }}</v-card-title
-              >
+                >{{ job.title }} - {{ job.contractType }}
+
+                <v-spacer></v-spacer>
+
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon
+                      dark
+                      color="gray darken-4"
+                      class="mr-3"
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="reportJob(job.uuid)"
+                      >mdi-alert-octagon</v-icon
+                    >
+                  </template>
+                  <span>Reportar vaga</span>
+                </v-tooltip>
+              </v-card-title>
               <v-card-subtitle
                 >{{ job.company }}
                 <span v-if="job.officeLocation">
@@ -182,6 +199,45 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="reportModal" width="500" dark color="black darken-1">
+      <v-card dark color="black darken-1">
+        <v-card-title>
+          Reportar
+        </v-card-title>
+
+        <v-card-text>
+          <v-form ref="form" lazy-validation>
+            <v-select
+              v-model="report.reason"
+              :items="reasonTypes"
+              label="Motivo"
+              name="reason"
+              :rules="notEmptyRule"
+            ></v-select>
+            <v-textarea
+              v-model="report.description"
+              label="Descrição"
+              name="description"
+              type="text"
+              :rules="notEmptyRule"
+            ></v-textarea>
+          </v-form>
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn dark grey @click="cancelReport">
+            Cancelar
+          </v-btn>
+          <v-btn dark class="red" @click="confirmReport">
+            Confirmar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 <script>
@@ -204,8 +260,14 @@ export default {
       pageIndex: 1,
       resultSize: 10,
       applyModal: false,
+      reportModal: false,
       linkedInUrl: '',
       selectedJobUuid: null,
+      report: {
+        jobUuid: null,
+        reason: null,
+        description: null,
+      },
       jobs: [],
       filter: {
         keyWords: [],
@@ -222,12 +284,20 @@ export default {
         { text: 'Sênior', value: 'SENIOR' },
         { text: 'Especialista', value: 'ESPECIALISTA' },
       ],
+      reasonTypes: [
+        { text: 'Não é trabalho remoto', value: 'NOT_REMOTE' },
+        { text: 'Valor incompatível', value: 'VALUE_TOO_LOW' },
+        { text: 'Descrição incompleta', value: 'INVALID_DESCRIPTION' },
+        { text: 'Me desrespeita de alguma forma', value: 'DISRESPECT' },
+        { text: 'Outro motivo...', value: 'SOMETHING_ELSE' },
+      ],
       snackbar: false,
       notification: {
         title: '',
         description: '',
         type: '',
       },
+      notEmptyRule: [(v) => !!v || 'O campo precisa ser preenchido!'],
     }
   },
   mounted() {
@@ -308,6 +378,9 @@ export default {
       this.selectedJobUuid = jobUuid
       this.applyModal = true
     },
+    cancelApply() {
+      this.applyModal = false
+    },
     async confirmApply(jobUuid) {
       await this.$api
         .post(`private/jobs/` + jobUuid + `/apply`)
@@ -331,9 +404,45 @@ export default {
           this.applyModal = false
         })
     },
+    reportJob(jobUuid) {
+      this.report.jobUuid = jobUuid
+      this.reportModal = true
+    },
+    cancelReport() {
+      this.reportModal = false
+      this.$refs.form.reset()
+    },
+    confirmReport() {
+      const valid = this.$refs.form.validate()
+      if (valid) {
+        this.$api
+          .post(`public/report/`, this.report)
+          .then((res) => {
+            this.notification.title = 'Feito'
+            this.notification.description =
+              'Você reportou essa vaga! Nossa equipe estará analisando sua denúncia e daremos uma posição o mais breve posível.'
+            this.notification.type = 'success'
+            this.$refs['message-alert'].showAlert()
+            this.cancelReport()
+          })
+          .catch((err) => {
+            let message = 'Houve um erro inesperado.'
+            if (err.response && err.response.status === 400) {
+              message = err.response.data.message
+            }
 
-    cancelApply() {
-      this.applyModal = false
+            this.notification.title = 'Erro'
+            this.notification.description = message || ''
+            this.notification.type = 'error'
+            this.$refs['message-alert'].showAlert()
+            this.cancelReport()
+          })
+      } else {
+        this.notification.title = 'Erro'
+        this.notification.description = 'Verifique os erros no formulário'
+        this.notification.type = 'error'
+        this.$refs['message-alert'].showAlert()
+      }
     },
   },
 }
