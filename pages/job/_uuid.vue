@@ -38,6 +38,16 @@
                 name="experienceType"
                 :rules="notEmptyRule"
               ></v-select>
+              <v-text-field
+                id="pac-input"
+                :value="job.officeLocation"
+                class="controls"
+                label="Localidade do escritório"
+                placeholder=""
+                name="Localidade"
+                type="text"
+                :rules="notEmptyRule"
+              ></v-text-field>
               <v-textarea
                 v-model="job.description"
                 label="Descrição"
@@ -58,7 +68,7 @@
                 <v-col cols="8">
                   <v-text-field
                     v-model="job.salary"
-                    label="Faixa salarial"
+                    label="Faixa salarial mínima"
                     name="description"
                     type="number"
                     :rules="salaryRules"
@@ -143,6 +153,7 @@ export default {
         description: '',
         type: '',
       },
+      autocomplete: null,
       notEmptyRule: [(v) => !!v || 'O campo precisa ser preenchido!'],
     }
   },
@@ -169,6 +180,20 @@ export default {
     },
   },
   mounted() {
+    const input = document.getElementById('pac-input')
+    const options = {
+      types: ['(cities)'],
+      componentRestrictions: { country: 'br' },
+      fields: ['formatted_address'],
+    }
+    this.autocomplete = new google.maps.places.Autocomplete(input, options)
+    this.autocomplete.addListener('place_changed', () => {
+      const place = this.autocomplete.getPlace()
+      if (place.formatted_address) {
+        this.job.officeLocation = place.formatted_address
+      }
+    })
+
     this.loadJob()
   },
   methods: {

@@ -96,13 +96,18 @@
               <v-card-title
                 >{{ job.title }} - {{ job.contractType }}</v-card-title
               >
-              <v-card-subtitle>{{ job.company }}</v-card-subtitle>
+              <v-card-subtitle
+                >{{ job.company }}
+                <span v-if="job.officeLocation">
+                  | {{ job.officeLocation }}</span
+                ></v-card-subtitle
+              >
               <v-card-text>
                 <div class="subtitle-1">
                   Nível: <strong>{{ job.experienceRequired }}</strong>
                 </div>
                 <div class="subtitle-1">
-                  Faixa salarial:
+                  Faixa salarial mínima:
                   <strong>
                     {{
                       format(job.salary) + '/' + getCompensationTypeLabel(job)
