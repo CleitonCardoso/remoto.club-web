@@ -73,6 +73,27 @@
 
         <v-divider class="mt-5 mb-5"></v-divider>
 
+        <v-row v-if="this.jobs.length < 1" align="center" justify="center">
+          <v-col>
+            <v-card elevation="1">
+              <v-card-text class="text-center">
+                <v-col class="text-center">
+                  <v-row align="center" justify="center">
+                    <h2>
+                      Nenhuma vaga cadastrada, clique no botão abaixo para
+                      cadastrar sua primeira vaga
+                    </h2>
+                  </v-row>
+                  <br />
+                  <v-row align="center" justify="center"
+                    ><v-btn dark to="/job">Cadastrar uma vaga</v-btn></v-row
+                  >
+                </v-col>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+
         <v-pagination
           v-if="this.jobs.length > 0"
           v-model="pageIndex"
