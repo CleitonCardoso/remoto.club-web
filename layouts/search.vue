@@ -75,13 +75,13 @@
     <v-main>
       <v-container fluid class="grey lighten-4 fill-height align-start">
         <v-row>
-          <v-col md="2">
+          <v-col v-if="!isMobile" md="2">
             <!-- Ad -->
           </v-col>
           <v-col md="8" xs="12">
             <nuxt />
           </v-col>
-          <v-col md="2">
+          <v-col v-if="!isMobile" md="2">
             <!-- Ad -->
           </v-col>
         </v-row>
@@ -100,9 +100,18 @@ export default {
   data: () => ({
     drawer: null,
     items: [],
+    isMobile: false,
   }),
   computed: {},
+
+  beforeDestroy() {
+    if (typeof window === 'undefined') return
+    window.removeEventListener('resize', this.onResize, { passive: true })
+  },
   mounted() {
+    this.onResize()
+    window.addEventListener('resize', this.onResize, { passive: true })
+
     if (this.$auth.loggedIn) {
       if (this.$auth.user.role === 'COMPANY') {
         this.items = [
@@ -143,6 +152,9 @@ export default {
         this.$router.push('/')
         this.$router.go()
       }
+    },
+    onResize() {
+      this.isMobile = window.innerWidth < 600
     },
   },
 }
