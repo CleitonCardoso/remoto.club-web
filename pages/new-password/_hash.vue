@@ -15,17 +15,26 @@
                     >Remoto.<span class="font-weight-light">Club</span></span
                   >
                 </router-link>
-                Recuperação de senha
+                Nova senha
               </v-toolbar-title>
             </v-toolbar>
             <v-card-text>
-              Você receberá um email para resetar a senha.
-              <v-form>
+              <v-form ref="recovery_form">
                 <v-text-field
-                  v-model="email"
-                  label="Email"
-                  name="login"
-                  type="text"
+                  v-model="newPassword"
+                  label="Nova senha"
+                  name="password"
+                  prepend-icon="mdi-lock"
+                  type="password"
+                  :rules="notEmptyRule"
+                ></v-text-field>
+
+                <v-text-field
+                  label="Confirmação de senha"
+                  name="password"
+                  prepend-icon="mdi-lock-plus"
+                  type="password"
+                  :rules="passwordMatchRule"
                 ></v-text-field>
               </v-form>
             </v-card-text>
@@ -33,11 +42,11 @@
               <v-btn dark class="ml-3" to="/login">
                 <span>
                   <v-icon>mdi-arrow-left</v-icon>
-                  Voltar
+                  Voltar para o login
                 </span>
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn class="mr-3" dark @click="send">Enviar</v-btn>
+              <v-btn dark class="mr-3" @click="performRecovery">Concluir</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -51,32 +60,37 @@ export default {
   layout: 'clean',
   data() {
     return {
-      email: '',
+      recoveryHash: '',
+      newPassword: '',
       notification: {
         title: '',
         description: '',
         type: '',
       },
       snackbar: false,
+      notEmptyRule: [(v) => !!v || 'O campo precisa ser preenchido!'],
+      passwordMatchRule: [
+        (v) => !v || v === this.newPassword || 'Senhas não correspondem!',
+      ],
     }
   },
+  mounted() {
+    this.recoveryHash = this.$route.query.recoveryHash
+  },
   methods: {
-    send() {
-      if (false) {
-        this.notification.title = 'ATENÇÃO'
-        this.notification.description =
-          'Esta funcionalidade ainda não foi implementada, em breve...'
-        this.notification.type = 'alert'
-        this.$refs['message-alert'].showAlert()
-      } else {
+    performRecovery() {
+      const valid = this.$refs.recovery_form.validate()
+      debugger
+      if (valid) {
         this.$api
-          .post('/login/recovery', null, { params: { email: this.email } })
+          .post('/login/perform-recovery/', null, {
+            params: {
+              recoveryHash: this.recoveryHash,
+              newPassword: this.newPassword,
+            },
+          })
           .then((resp) => {
-            this.notification.title = 'Enviado'
-            this.notification.description =
-              'Verifique sua caixa de email e spam em alguns minutos'
-            this.notification.type = 'success'
-            this.$refs['message-alert'].showAlert()
+            this.$router.push('/login')
           })
           .catch((err) => {
             let message = 'Houve um erro inesperado.'
@@ -88,6 +102,11 @@ export default {
             this.notification.description = message
             this.$refs['message-alert'].showAlert()
           })
+      } else {
+        this.notification.title = 'Erro'
+        this.notification.description = 'Verifique os erros no formulário'
+        this.notification.type = 'error'
+        this.$refs['message-alert'].showAlert()
       }
     },
   },
