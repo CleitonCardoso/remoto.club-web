@@ -85,6 +85,7 @@ export default {
             }
 
             this.notification.title = 'Erro'
+            this.notification.type = 'error'
             this.notification.description = message
             this.$refs['message-alert'].showAlert()
           })
