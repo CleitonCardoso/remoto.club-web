@@ -80,8 +80,14 @@ export default {
   methods: {
     load() {
       const uuid = this.$route.params.uuid
+      const isAdmin = this.$auth.user.role === 'ADMIN'
       this.$api
-        .get(`private/my-jobs/` + uuid + `/candidates`)
+        .get(
+          `private` +
+            (isAdmin ? `/admin-jobs/` : `/my-jobs/`) +
+            uuid +
+            `/candidates`
+        )
         .then((res) => {
           this.candidates = res.data
         })

@@ -113,6 +113,30 @@ export default {
     window.addEventListener('resize', this.onResize, { passive: true })
 
     if (this.$auth.loggedIn) {
+      if (this.$auth.user.role === 'ADMIN') {
+        this.items = [
+          {
+            icon: 'create',
+            text: 'Adicionar uma vaga avulsa',
+            to: '/admin-job',
+          },
+          {
+            icon: 'list',
+            text: 'Ver vagas avulsas',
+            to: '/admin-jobs',
+          },
+          { divider: true },
+          {
+            icon: 'mail',
+            text: 'Configuração de email',
+            to: '/mail-config',
+          },
+          { icon: 'mdi-account-circle', text: 'Meu perfil', to: '/my-profile' },
+          { icon: 'mdi-cog', text: 'Configurações', to: '/configs' },
+          { divider: true },
+          { icon: 'mdi-logout', text: 'Sair', exit: true },
+        ]
+      }
       if (this.$auth.user.role === 'COMPANY') {
         this.items = [
           { icon: 'create', text: 'Adicionar uma vaga', to: '/job' },

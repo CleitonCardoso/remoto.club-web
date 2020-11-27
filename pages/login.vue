@@ -109,11 +109,17 @@ export default {
         this.$auth
           .loginWith('local', { data: { username, password } })
           .then((response) => {
-            this.$router.push(
-              this.$auth.$state.user.role === 'CANDIDATE'
-                ? '/vagas'
-                : '/my-jobs'
-            )
+            switch (this.$auth.$state.user.role) {
+              case 'CANDIDATE':
+                this.$router.push('/vagas')
+                break
+              case 'COMPANY':
+                this.$router.push('/my-jobs')
+                break
+              case 'ADMIN':
+                this.$router.push('/admin-jobs')
+                break
+            }
           })
           .catch((e) => {
             let description = 'Servidor indisponível'
@@ -139,9 +145,17 @@ export default {
       this.$auth
         .loginWith('local', { data: { linkedInCode, redirectUri } })
         .then((response) => {
-          this.$router.push(
-            this.$auth.$state.user.role === 'CANDIDATE' ? '/vagas' : '/my-jobs'
-          )
+          switch (this.$auth.$state.user.role) {
+            case 'CANDIDATE':
+              this.$router.push('/vagas')
+              break
+            case 'COMPANY':
+              this.$router.push('/my-jobs')
+              break
+            case 'ADMIN':
+              this.$router.push('/admin-jobs')
+              break
+          }
         })
         .catch((e) => {
           let description = 'Servidor indisponível'
