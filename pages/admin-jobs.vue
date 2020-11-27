@@ -306,7 +306,7 @@ export default {
       }
     },
     openCandidates(uuid) {
-      this.$router.push('/admin-candidates/' + uuid)
+      this.$router.push('/candidates/' + uuid)
     },
     closeJob(uuid) {
       this.$api
