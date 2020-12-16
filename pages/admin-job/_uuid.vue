@@ -57,10 +57,14 @@
               ></v-text-field>
               <v-textarea
                 v-model="job.description"
-                label="Descrição"
+                :label="
+                  'Descrição (' +
+                  (job.description ? job.description.length : 0) +
+                  ' de 2048)'
+                "
                 name="description"
                 type="text"
-                :rules="notEmptyRule"
+                :rules="notEmptyAndlimitingSizeRule"
               ></v-textarea>
               <v-row>
                 <v-col cols="4">
@@ -162,6 +166,12 @@ export default {
       },
       autocomplete: null,
       notEmptyRule: [(v) => !!v || 'O campo precisa ser preenchido!'],
+      notEmptyAndlimitingSizeRule: [
+        (v) => !!v || 'O campo precisa ser preenchido!',
+        (v) =>
+          (!!v && v.length > 0 && v.length < 2049) ||
+          'Por favor, verifique o número de caracteres',
+      ],
     }
   },
   computed: {

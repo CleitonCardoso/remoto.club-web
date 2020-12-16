@@ -5,21 +5,20 @@
       <v-flex class="align-start">
         <v-card class="elevation-12">
           <v-toolbar dark flat>
-            <v-toolbar-title>
-              <router-link
-                to="/"
-                style="text-decoration: none; color: inherit;"
-              >
-                <span class="title ml-3 mr-5 text--darken-4">Candidatos</span>
-              </router-link>
-            </v-toolbar-title>
+            <span class="title ml-3 mr-5 text--darken-4"
+              >Templates de email</span
+            >
+            <v-spacer></v-spacer>
+            <v-btn light @click="newTemplate">Novo template</v-btn>
           </v-toolbar>
           <v-card-text>
             <v-data-table
               :headers="headers"
               item-key="uuid"
-              :items="candidates"
+              :items="templates"
               :items-per-page="20"
+              class="row-pointer"
+              @click:row="openTemplate"
             >
               <template v-slot:[`item.actions`]="{ item }">
                 <v-select
@@ -55,16 +54,14 @@ import ErrorAlert from '~/components/ErrorAlert'
 
 export default {
   layout: 'search',
-  middleware: 'auth',
   components: { ErrorAlert },
   data() {
     return {
       dialog: false,
-      candidates: [],
+      templates: [],
       headers: [
-        { text: 'Nome', value: 'name' },
-        { text: 'Url linkedin', value: 'linkedInUrl' },
-        { text: 'Ações', value: 'actions', sortable: false },
+        { text: 'Título', value: 'title' },
+        { text: 'Status', value: 'status' },
       ],
       notification: {
         title: '',
@@ -78,17 +75,10 @@ export default {
   },
   methods: {
     load() {
-      const uuid = this.$route.params.uuid
-      const isAdmin = this.$auth.user.role === 'ADMIN'
       this.$api
-        .get(
-          `private` +
-            (isAdmin ? `/admin-jobs/` : `/my-jobs/`) +
-            uuid +
-            `/candidates`
-        )
+        .get(`private/admin/mail-template/`)
         .then((res) => {
-          this.candidates = res.data
+          this.templates = res.data
         })
         .catch((err) => {
           let message = 'Houve um erro inesperado.'
@@ -98,10 +88,20 @@ export default {
 
           this.notification.title = 'Erro'
           this.notification.description = message
-          this.notification.type = 'error'
           this.$refs['message-alert'].showAlert()
         })
+    },
+    openTemplate(value) {
+      this.$router.push('/mail-templates/' + value.uuid)
+    },
+    newTemplate() {
+      this.$router.push('/mail-templates/')
     },
   },
 }
 </script>
+<style lang="css">
+.row-pointer > .v-data-table__wrapper > table > tbody > tr :hover {
+  cursor: pointer;
+}
+</style>

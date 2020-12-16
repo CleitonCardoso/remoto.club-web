@@ -127,6 +127,11 @@ export default {
           },
           { divider: true },
           {
+            icon: 'mdi-email-edit',
+            text: 'Templates de email',
+            to: '/mail-templates/all',
+          },
+          {
             icon: 'mail',
             text: 'Configuração de email',
             to: '/mail-config',
