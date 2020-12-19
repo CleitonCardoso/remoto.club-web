@@ -34,6 +34,9 @@
             >
             <v-spacer></v-spacer>
             <v-btn dark class="mr-3" @click="goBack">Voltar</v-btn>
+            <v-btn dark class="mr-3" @click="testTemplate"
+              >Enviar email de teste</v-btn
+            >
             <v-btn dark class="mr-3" @click="saveDesign">Salvar template</v-btn>
           </v-card-actions>
         </v-card>
@@ -189,6 +192,33 @@ export default {
     },
     confirmGoBack() {
       this.$router.push('/mail-templates/all')
+    },
+    testTemplate() {
+      this.$refs.emailEditor.editor.exportHtml((data) => {
+        debugger
+        this.$api
+          .post(`private/admin/mail-template/test`, data.html, {
+            headers: { 'Content-Type': 'text/plain' },
+          })
+          .then((res) => {
+            this.mailTemplate = res.data
+            this.notification.title = 'Enviado com sucesso'
+            this.notification.description = 'Enviado com sucesso!'
+            this.notification.type = 'success'
+            this.$refs['message-alert'].showAlert()
+            this.editorLoaded()
+          })
+          .catch((err) => {
+            let message = 'Houve um erro inesperado.'
+            if (err.response && err.response.status === 400) {
+              message = err.response.data.message
+            }
+
+            this.notification.title = 'Erro'
+            this.notification.description = message
+            this.$refs['message-alert'].showAlert()
+          })
+      })
     },
   },
 }
