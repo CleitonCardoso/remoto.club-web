@@ -2,11 +2,11 @@
   <v-footer absolute>
     <v-flex class="text-center align-center">
       <a
-        href="http://cleitoncardoso.com"
+        href="/"
         style="text-decoration: none; color: inherit;"
-        target="_blank"
         rel="noopener noreferrer"
-        >Remoto.Club - {{ new Date().getFullYear() }}</a
+      >
+        <b>Remoto.Club</b> | contato@remoto.club | +55 (47) 99659 0190</a
       >
     </v-flex>
   </v-footer>

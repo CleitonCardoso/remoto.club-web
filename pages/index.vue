@@ -36,12 +36,12 @@
                 <br />
                 <v-row>
                   <v-col>
-                    <v-btn dark large block to="/vagas">
+                    <v-btn light large block to="/vagas">
                       Procuro um emprego
                     </v-btn>
                   </v-col>
                   <v-col>
-                    <v-btn dark large block to="/login">
+                    <v-btn light large block to="/login">
                       Procuro um profissional
                     </v-btn>
                   </v-col>
@@ -129,6 +129,42 @@
           </v-layout>
         </v-container>
       </section>
+      <section id="contato" style="margin-top: 30px;">
+        <v-container grid-list-xl>
+          <v-layout justify-center row wrap class="my-5">
+            <v-flex xs12 md6>
+              <v-card
+                class="elevation-0 text-center"
+                style="background-color: rgba(0, 0, 0, 0.8);"
+                dark
+              >
+                <v-card-title primary-title class="layout">
+                  <v-flex class="text-center">
+                    <div style="font-size: 3vh;">
+                      <a class="contact-link" href="#contato">
+                        Entre em contato pelo WhatsApp!
+                      </a>
+                    </div>
+                  </v-flex>
+                </v-card-title>
+                <v-card-text>
+                  <v-text-field
+                    v-model="contact.subject"
+                    label="Motivo do contato"
+                  ></v-text-field>
+                  <v-textarea
+                    v-model="contact.details"
+                    label="Conte-nos mais..."
+                  ></v-textarea>
+                  <v-btn light @click="sendPostToWhatsapp"
+                    >Iniciar conversa</v-btn
+                  >
+                </v-card-text>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </section>
     </v-container>
     <Footer></Footer>
   </v-main>
@@ -144,34 +180,26 @@ export default {
   },
   data() {
     return {
-      number: 4,
-      title: 'Endorfine',
-      imageLink: {
-        main: '/landing/2.jpg',
-        sub_main: '/landing/3.jpg',
-        logo: '/landing/1.jpg',
-        social_cover: '/landing/1.jpg',
+      contact: {
+        subject: '',
+        details: '',
       },
-      email: '',
-      emailRules: [
-        (v) => {
-          return !!v || 'E-mail is required'
-        },
-        (v) =>
-          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-          'E-mail must be valid',
-      ],
-      subscribed: false,
     }
   },
-  computed: {},
-  mounted() {
-    debugger
-    console.log(this.$vuetify.breakpoint)
-  },
+  mounted() {},
   methods: {
-    subscribe() {
-      this.subscribed = !this.subscribed
+    sendPostToWhatsapp() {
+      const moderator = '47996590190'
+      const p1 = 'Motivo: ' + this.contact.subject + '\n'
+      const p2 = ' | Conteúdo: ' + this.contact.details + '\n'
+
+      const url =
+        'https://api.whatsapp.com/send?phone=+55' +
+        moderator +
+        '&text=' +
+        p1 +
+        p2
+      window.open(url, '_blank')
     },
   },
 }
@@ -180,6 +208,15 @@ export default {
 <style>
 body {
   word-break: keep-all;
+}
+
+.contact-link {
+  text-decoration: none;
+  color: #ffffff !important;
+}
+
+.contact-link:hover {
+  cursor: pointer !important;
 }
 
 .back {
