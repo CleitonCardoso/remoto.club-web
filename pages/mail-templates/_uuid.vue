@@ -116,9 +116,7 @@ export default {
         this.$api
           .get(`private/admin/mail-template/` + uuid)
           .then((res) => {
-            debugger
             this.mailTemplate = res.data
-            console.log(JSON.parse(this.mailTemplate.design))
             this.$refs.emailEditor.editor.loadDesign(
               JSON.parse(this.mailTemplate.design)
             )
@@ -141,8 +139,9 @@ export default {
       this.loadMailTemplate()
     },
     saveDesign() {
-      this.$refs.emailEditor.editor.saveDesign((design) => {
-        this.mailTemplate.design = JSON.stringify(design)
+      this.$refs.emailEditor.editor.exportHtml((data) => {
+        this.mailTemplate.design = JSON.stringify(data.design)
+        this.mailTemplate.html = data.html
         this.$api
           .post(`private/admin/mail-template`, this.mailTemplate)
           .then((res) => {
