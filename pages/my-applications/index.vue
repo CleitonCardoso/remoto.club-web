@@ -211,7 +211,7 @@ export default {
       params['result-size'] = 10
 
       await this.$api
-        .get('private/my-applications/applications')
+        .get('private/my-applications/all')
         .then((res) => {
           this.applications = res.data
           const arrayJobs = this.applications
