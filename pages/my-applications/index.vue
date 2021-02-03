@@ -94,8 +94,13 @@
           <v-col>
             <v-card dark color="black darken-1" elevation="5">
               <v-card-title
-                >{{ job.title }} - {{ job.contractType }}</v-card-title
-              >
+                >{{ job.title }} - {{ job.contractType }}
+                <v-spacer></v-spacer>
+                <strong>
+                  Situação:
+                  {{ getStatusLabel(job) }}</strong
+                >
+              </v-card-title>
               <v-card-subtitle
                 >{{ job.company }}
                 <span v-if="job.officeLocation">
@@ -160,6 +165,9 @@ export default {
       pageIndex: 1,
       resultSize: 10,
       jobs: [],
+      job: {},
+      applications: [],
+      status: [],
       filter: {
         keyWords: [],
         contractTypes: [],
@@ -203,9 +211,14 @@ export default {
       params['result-size'] = 10
 
       await this.$api
-        .get(`private/my-applications`, { params })
+        .get('private/my-applications/applications')
         .then((res) => {
-          this.jobs = res.data.content
+          this.applications = res.data
+          const arrayJobs = this.applications
+          arrayJobs.forEach((e) => {
+            e.job.status = e.status
+            this.jobs.push(e.job)
+          })
           this.loading = false
           this.resultSize = res.data.totalPages
         })
@@ -237,6 +250,32 @@ export default {
             return 'mês'
           case 'PER_YEAR':
             return 'ano'
+        }
+      } else {
+        if (job.salary >= 0 && job.salary < 600) {
+          return 'hora'
+        }
+        if (job.salary >= 600 && job.salary < 30000) {
+          return 'mês'
+        }
+        if (job.salary >= 30000) {
+          return 'ano'
+        }
+      }
+    },
+    getStatusLabel(job) {
+      if (job.status) {
+        switch (job.status) {
+          case 'APPLIED':
+            return 'Aplicado'
+          case 'REJECTED':
+            return 'Rejeitado'
+          case 'ACCEPTED':
+            return 'Aceito'
+          case 'OFFERED':
+            return 'Oferta'
+          case 'HIRED':
+            return 'Contratado'
         }
       } else {
         if (job.salary >= 0 && job.salary < 600) {
