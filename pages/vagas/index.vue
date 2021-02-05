@@ -93,8 +93,8 @@
         <v-row v-for="(job, index) in jobs" :key="`job-${index}`">
           <v-col>
             <v-card dark color="black darken-1" elevation="5">
-              <v-card-title
-                >{{ job.title }} - {{ job.contractType }}
+              <v-card-title>
+                <strong>{{ job.title }} - {{ job.contractType }}</strong>
 
                 <v-spacer></v-spacer>
 

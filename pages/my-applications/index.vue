@@ -74,7 +74,7 @@
         <v-divider class="mt-5 mb-5"></v-divider>
 
         <v-pagination
-          v-if="this.jobs.length > 0"
+          v-if="this.applications.length > 0"
           v-model="pageIndex"
           dark
           :length="resultSize"
@@ -122,7 +122,7 @@
                     {{
                       format(application.job.salary) +
                       '/' +
-                      getCompensationTypeLabel(job)
+                      getCompensationTypeLabel(application.job)
                     }}</strong
                   >
                 </div>
@@ -143,7 +143,7 @@
           </v-col>
         </v-row>
         <v-pagination
-          v-if="this.jobs.length > 0"
+          v-if="this.applications.length > 0"
           v-model="pageIndex"
           dark
           :length="resultSize"
@@ -173,8 +173,6 @@ export default {
       loading: false,
       pageIndex: 1,
       resultSize: 10,
-      jobs: [],
-      job: {},
       applications: [],
       status: [],
       filter: {

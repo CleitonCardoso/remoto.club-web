@@ -129,6 +129,7 @@ export default {
 
             this.notification.title = 'Erro'
             this.notification.description = message
+            this.notification.type = 'error'
             this.$refs['message-alert'].showAlert()
           })
       } else {
@@ -160,6 +161,7 @@ export default {
 
             this.notification.title = 'Erro'
             this.notification.description = message
+            this.notification.type = 'error'
             this.$refs['message-alert'].showAlert()
           })
 
@@ -183,6 +185,7 @@ export default {
 
           this.notification.title = 'Erro'
           this.notification.description = message
+          this.notification.type = 'error'
           this.$refs['message-alert'].showAlert()
         })
     },
@@ -215,6 +218,7 @@ export default {
 
             this.notification.title = 'Erro'
             this.notification.description = message
+            this.notification.type = 'error'
             this.$refs['message-alert'].showAlert()
           })
       })
