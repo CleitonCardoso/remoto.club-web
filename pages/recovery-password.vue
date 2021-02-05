@@ -62,34 +62,26 @@ export default {
   },
   methods: {
     send() {
-      if (false) {
-        this.notification.title = 'ATENÇÃO'
-        this.notification.description =
-          'Esta funcionalidade ainda não foi implementada, em breve...'
-        this.notification.type = 'alert'
-        this.$refs['message-alert'].showAlert()
-      } else {
-        this.$api
-          .post('/login/recovery', null, { params: { email: this.email } })
-          .then((resp) => {
-            this.notification.title = 'Enviado'
-            this.notification.description =
-              'Verifique sua caixa de email e spam em alguns minutos'
-            this.notification.type = 'success'
-            this.$refs['message-alert'].showAlert()
-          })
-          .catch((err) => {
-            let message = 'Houve um erro inesperado.'
-            if (err.response && err.response.status === 400) {
-              message = err.response.data.message
-            }
+      this.$api
+        .post('/login/recovery', null, { params: { email: this.email } })
+        .then((resp) => {
+          this.notification.title = 'Enviado'
+          this.notification.description =
+            'Verifique sua caixa de email e spam em alguns minutos'
+          this.notification.type = 'success'
+          this.$refs['message-alert'].showAlert()
+        })
+        .catch((err) => {
+          let message = 'Houve um erro inesperado.'
+          if (err.response && err.response.status === 400) {
+            message = err.response.data.message
+          }
 
-            this.notification.title = 'Erro'
-            this.notification.type = 'error'
-            this.notification.description = message
-            this.$refs['message-alert'].showAlert()
-          })
-      }
+          this.notification.title = 'Erro'
+          this.notification.type = 'error'
+          this.notification.description = message
+          this.$refs['message-alert'].showAlert()
+        })
     },
   },
 }

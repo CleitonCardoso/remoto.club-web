@@ -73,7 +73,6 @@ export default {
       candidature: null,
     }
   },
-
   mounted() {
     const jobUuid = this.$route.params.uuid
     this.$api
