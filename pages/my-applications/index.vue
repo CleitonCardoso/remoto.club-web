@@ -90,38 +90,52 @@
           ></v-progress-circular>
         </div>
 
-        <v-row v-for="(job, index) in jobs" :key="`job-${index}`">
+        <v-row
+          v-for="(application, index) in applications"
+          :key="`job-${index}`"
+        >
           <v-col>
             <v-card dark color="black darken-1" elevation="5">
               <v-card-title
-                >{{ job.title }} - {{ job.contractType }}</v-card-title
-              >
+                >{{ application.job.title }} -
+                {{ application.job.contractType }}
+                <v-spacer></v-spacer>
+                <strong>
+                  Situação:
+                  {{ getStatusLabel(application.status) }}</strong
+                >
+              </v-card-title>
               <v-card-subtitle
-                >{{ job.company }}
-                <span v-if="job.officeLocation">
-                  | {{ job.officeLocation }}</span
+                >{{ application.job.company }}
+                <span v-if="application.job.officeLocation">
+                  | {{ application.job.officeLocation }}</span
                 ></v-card-subtitle
               >
               <v-card-text>
                 <div class="subtitle-1">
-                  Nível: <strong>{{ job.experienceRequired }}</strong>
+                  Nível:
+                  <strong>{{ application.job.experienceRequired }}</strong>
                 </div>
                 <div class="subtitle-1">
                   Faixa salarial mínima:
                   <strong>
                     {{
-                      format(job.salary) + '/' + getCompensationTypeLabel(job)
+                      format(application.job.salary) +
+                      '/' +
+                      getCompensationTypeLabel(job)
                     }}</strong
                   >
                 </div>
 
                 <div class="my-4">
-                  <p style="white-space: pre-wrap;">{{ job.description }}</p>
+                  <p style="white-space: pre-wrap;">
+                    {{ application.job.description }}
+                  </p>
                 </div>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn dark grey @click="openApplication(job.uuid)">
+                <v-btn dark grey @click="openApplication(application.job.uuid)">
                   Ver candidatura
                 </v-btn>
               </v-card-actions>
@@ -160,6 +174,9 @@ export default {
       pageIndex: 1,
       resultSize: 10,
       jobs: [],
+      job: {},
+      applications: [],
+      status: [],
       filter: {
         keyWords: [],
         contractTypes: [],
@@ -203,9 +220,9 @@ export default {
       params['result-size'] = 10
 
       await this.$api
-        .get(`private/my-applications`, { params })
+        .get('private/my-applications', { params })
         .then((res) => {
-          this.jobs = res.data.content
+          this.applications = res.data.content
           this.loading = false
           this.resultSize = res.data.totalPages
         })
@@ -248,6 +265,20 @@ export default {
         if (job.salary >= 30000) {
           return 'ano'
         }
+      }
+    },
+    getStatusLabel(status) {
+      switch (status) {
+        case 'APPLIED':
+          return 'Aplicado'
+        case 'REJECTED':
+          return 'Rejeitado'
+        case 'ACCEPTED':
+          return 'Aceito'
+        case 'OFFERED':
+          return 'Oferta'
+        case 'HIRED':
+          return 'Contratado'
       }
     },
     openApplication(uuid) {
