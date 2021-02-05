@@ -220,9 +220,9 @@ export default {
       params['result-size'] = 10
 
       await this.$api
-        .get('private/my-applications/all')
+        .get('private/my-applications/allByFilter', { params })
         .then((res) => {
-          this.applications = res.data
+          this.applications = res.data.content
           this.loading = false
           this.resultSize = res.data.totalPages
         })
