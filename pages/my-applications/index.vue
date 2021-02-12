@@ -183,6 +183,7 @@ export default {
       contractTypes: [
         { text: 'CLT', value: 'CLT' },
         { text: 'PJ', value: 'PJ' },
+        { text: 'Cooperando', value: 'COOPERANDO' },
       ],
       experienceTypes: [
         { text: 'Júnior', value: 'JUNIOR' },
