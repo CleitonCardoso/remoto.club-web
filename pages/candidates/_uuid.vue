@@ -43,7 +43,14 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn dark class="mr-3" to="/my-jobs">Voltar</v-btn>
+            <v-btn
+              dark
+              class="mr-3"
+              :to="
+                this.$auth.user.role === 'ADMIN' ? '/admin-jobs' : '/my-jobs'
+              "
+              >Voltar</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-flex>
