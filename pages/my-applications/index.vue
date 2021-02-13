@@ -63,9 +63,7 @@
               </v-row>
 
               <v-card-actions>
-                <v-btn dark block grey @click="search">
-                  Pesquisar
-                </v-btn>
+                <v-btn dark block grey @click="search"> Pesquisar </v-btn>
               </v-card-actions>
             </v-card-text>
           </v-expand-transition>
