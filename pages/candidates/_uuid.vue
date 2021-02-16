@@ -16,12 +16,14 @@
           </v-toolbar>
           <v-card-text>
             <v-data-table
+              class="row-pointer"
               :headers="headers"
               item-key="uuid"
               :items="candidates"
               :items-per-page="20"
+              @click:row="openCandidate"
             >
-              <template v-slot:[`item.actions`]="{ item }">
+              <!-- <template v-slot:[`item.actions`]="{ item }">
                 <v-select
                   v-model="select"
                   :items="items"
@@ -32,7 +34,7 @@
                   return-object
                   single-line
                 ></v-select>
-              </template>
+              </template> -->
 
               <template v-slot:[`item.linkedInUrl`]="{ item }">
                 <a :href="item.linkedInUrl" target="_blank">
@@ -67,6 +69,7 @@ export default {
   data() {
     return {
       dialog: false,
+      jobUuid: null,
       candidates: [],
       headers: [
         { text: 'Nome', value: 'name' },
@@ -85,13 +88,13 @@ export default {
   },
   methods: {
     load() {
-      const uuid = this.$route.params.uuid
+      this.jobUuid = this.$route.params.uuid
       const isAdmin = this.$auth.user.role === 'ADMIN'
       this.$api
         .get(
           `private` +
             (isAdmin ? `/admin-jobs/` : `/my-jobs/`) +
-            uuid +
+            this.jobUuid +
             `/candidates`
         )
         .then((res) => {
@@ -109,6 +112,14 @@ export default {
           this.$refs['message-alert'].showAlert()
         })
     },
+    openCandidate(candidate) {
+      window.open(`/candidate/${this.jobUuid}/${candidate.uuid}`, '_blank')
+    },
   },
 }
 </script>
+<style scoped>
+.row-pointer >>> tbody tr :hover {
+  cursor: pointer;
+}
+</style>

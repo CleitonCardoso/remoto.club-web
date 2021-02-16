@@ -80,7 +80,6 @@ export default {
   methods: {
     performRecovery() {
       const valid = this.$refs.recovery_form.validate()
-      debugger
       if (valid) {
         this.$api
           .post('/login/perform-recovery/', null, {

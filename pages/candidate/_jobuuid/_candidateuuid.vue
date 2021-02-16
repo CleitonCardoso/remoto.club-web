@@ -2,54 +2,91 @@
   <div>
     <v-row>
       <v-col>
-        <v-btn dark to="/my-applications">
-          <span>
-            <v-icon>mdi-arrow-left</v-icon>
-            Voltar
-          </span>
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
         <v-card v-if="candidature">
-          <v-stepper v-if="candidature" v-model="e1" class="elevation-0">
-            <v-stepper-header>
-              <v-stepper-step step="1" complete>
-                Você se aplicou à vaga
-              </v-stepper-step>
-
-              <v-divider></v-divider>
-
-              <v-stepper-step
-                :complete="
-                  ['ACCEPTED', 'OFFERED', 'HIRED'].includes(candidature.status)
-                "
-                step="2"
+          <v-card-title style="cursor: pointer;" @click="revealer()">
+            <div>
+              <div>
+                <strong>
+                  {{ candidature.job.title }} -
+                  {{ candidature.job.contractType }}
+                </strong>
+              </div>
+              {{ candidature.job.company }}
+              <span v-if="candidature.job.officeLocation">
+                | {{ candidature.job.officeLocation }}</span
               >
-                A empresa quer te conhecer
-              </v-stepper-step>
-
-              <v-divider></v-divider>
-
-              <v-stepper-step
-                :complete="['OFFERED', 'HIRED'].includes(candidature.status)"
-                step="3"
+            </div>
+            <v-spacer></v-spacer>
+            <div>
+              <div>
+                Nível:
+                {{ candidature.job.experienceRequired }}
+              </div>
+              <strong>
+                {{
+                  format(candidature.job.salary) +
+                  '/' +
+                  getCompensationTypeLabel(candidature.job)
+                }}</strong
               >
-                Você recebeu uma oferta
-              </v-stepper-step>
+            </div>
+          </v-card-title>
 
-              <v-divider></v-divider>
-
-              <v-stepper-step
-                :complete="candidature.status === 'HIRED'"
-                step="4"
+          <v-expand-transition>
+            <v-card v-show="reveal" class="elevation-0">
+              <v-container
+                style="white-space: pre-wrap; cursor: pointer;"
+                @click="revealer()"
               >
-                Contratado!
-              </v-stepper-step>
-            </v-stepper-header>
+                {{ candidature.job.description }}
+              </v-container>
+            </v-card>
+          </v-expand-transition>
+          <v-col>
+            <v-stepper
+              v-if="candidature"
+              v-model="e1"
+              class="elevation-0"
+              alt-labels
+            >
+              <v-stepper-header>
+                <v-stepper-step step="1" complete>
+                  Houve interesse na sua vaga!
+                </v-stepper-step>
 
-            <!-- <v-stepper-items>
+                <v-divider></v-divider>
+
+                <v-stepper-step
+                  :complete="
+                    ['ACCEPTED', 'OFFERED', 'HIRED'].includes(
+                      candidature.status
+                    )
+                  "
+                  step="2"
+                >
+                  Conhecendo melhor o candidato
+                </v-stepper-step>
+
+                <v-divider></v-divider>
+
+                <v-stepper-step
+                  :complete="['OFFERED', 'HIRED'].includes(candidature.status)"
+                  step="3"
+                >
+                  Hora da oferta
+                </v-stepper-step>
+
+                <v-divider></v-divider>
+
+                <v-stepper-step
+                  :complete="candidature.status === 'HIRED'"
+                  step="4"
+                >
+                  Contratado!
+                </v-stepper-step>
+              </v-stepper-header>
+
+              <!-- <v-stepper-items>
               <v-stepper-content step="1"> </v-stepper-content>
 
               <v-stepper-content step="2">
@@ -76,59 +113,43 @@
                 <v-btn text> Cancel </v-btn>
               </v-stepper-content>
             </v-stepper-items> -->
-          </v-stepper>
+            </v-stepper>
+          </v-col>
         </v-card>
       </v-col>
     </v-row>
-    <v-row v-if="candidature">
-      <v-col>
+    <v-row>
+      <v-col lg="6" md="12" sm="12" xs="12">
         <v-card height="100%" class="fill-height">
           <v-card-title>
-            <div>
-              <div>
-                <strong>
-                  {{ candidature.job.title }} -
-                  {{ candidature.job.contractType }}
-                </strong>
-              </div>
-              <div>
-                {{ candidature.job.company }}
-                <span v-if="candidature.job.officeLocation">
-                  | {{ candidature.job.officeLocation }}</span
-                >
-              </div>
-              <div>
-                Nível:
-                {{ candidature.job.experienceRequired }}
-              </div>
-            </div>
-
-            <v-spacer></v-spacer>
-            <div>
-              <strong>
-                {{
-                  format(candidature.job.salary) +
-                  '/' +
-                  getCompensationTypeLabel(candidature.job)
-                }}</strong
-              >
-            </div>
+            <h1>Detalhes do candidato</h1>
           </v-card-title>
-          <v-card-text>
-            <pre style="white-space: pre-wrap;">
-            {{ candidature.job.description }}
-            </pre>
-          </v-card-text>
-        </v-card>
+          <v-card-text v-if="candidature">
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ candidature.candidate.name }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>
+                  <a :href="candidature.candidate.linkedInUrl">LinkedIn</a>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-card-text></v-card
+        >
       </v-col>
-      <v-col>
+      <v-col lg="6" md="12" sm="12" xs="12">
         <v-card
           height="100%"
           class="d-flex flex-column fill-height"
           style="height: 55vh; max-height: 55vh;"
         >
-          <v-card-title class="elevation-5 text-center">
-            <h2>Mensagens</h2>
+          <v-card-title class="elevation-5">
+            <h1>Mensagens</h1>
           </v-card-title>
           <v-card-text
             ref="messagesContent"
@@ -178,7 +199,6 @@ const brlFormatter = new Intl.NumberFormat('pt-BR', {
   maximumFractionDigits: 2,
   unitDisplay: 'short',
 })
-
 export default {
   layout: 'search',
   middleware: 'auth',
@@ -253,9 +273,10 @@ export default {
       }
     },
     async load() {
-      const jobUuid = this.$route.params.uuid
+      const jobUuid = this.$route.params.jobuuid
+      const candidateUuid = this.$route.params.candidateuuid
       await this.$api
-        .get(`private/my-applications/` + jobUuid)
+        .get(`private/my-jobs/${jobUuid}/candidates/${candidateUuid}`)
         .then((res) => {
           this.candidature = res.data
         })
