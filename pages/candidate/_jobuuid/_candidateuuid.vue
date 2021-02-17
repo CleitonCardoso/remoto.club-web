@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div v-if="jobUuid">
     <v-row>
       <v-col>
-        <v-btn dark :to="`/candidates/${candidatureUuid}`">
+        <v-btn dark @click="backToCandidates">
           <span>
             <v-icon>mdi-arrow-left</v-icon>
             Voltar
@@ -233,6 +233,11 @@ export default {
       candidateUuid: null,
     }
   },
+  computed: {
+    linkToCandidates() {
+      return `/candidates/${this.jobUuid}`
+    },
+  },
   async mounted() {
     this.jobUuid = this.$route.params.jobuuid
     this.candidateUuid = this.$route.params.candidateuuid
@@ -369,6 +374,10 @@ export default {
           this.connected = false
         }
       )
+    },
+    backToCandidates() {
+      debugger
+      this.$router.push(this.linkToCandidates)
     },
     scrollToBottom() {
       const messagesContentElement = this.$refs.messagesContent

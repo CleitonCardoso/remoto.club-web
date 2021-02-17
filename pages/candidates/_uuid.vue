@@ -3,6 +3,23 @@
     <v-layout row wrap>
       <ErrorAlert ref="message-alert" :notification="notification"></ErrorAlert>
       <v-flex class="align-start">
+        <v-spacer></v-spacer>
+        <v-row>
+          <v-col>
+            <v-btn
+              dark
+              :to="
+                this.$auth.user.role === 'ADMIN' ? '/admin-jobs' : '/my-jobs'
+              "
+            >
+              <span>
+                <v-icon>mdi-arrow-left</v-icon>
+                Voltar
+              </span>
+            </v-btn>
+          </v-col>
+        </v-row>
+
         <v-card class="elevation-12">
           <v-toolbar dark flat>
             <v-toolbar-title>
@@ -43,17 +60,6 @@
               </template>
             </v-data-table>
           </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              dark
-              class="mr-3"
-              :to="
-                this.$auth.user.role === 'ADMIN' ? '/admin-jobs' : '/my-jobs'
-              "
-              >Voltar</v-btn
-            >
-          </v-card-actions>
         </v-card>
       </v-flex>
     </v-layout>
