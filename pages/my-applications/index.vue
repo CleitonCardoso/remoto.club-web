@@ -3,36 +3,41 @@
     <v-layout row wrap>
       <ErrorAlert ref="message-alert" :notification="notification"></ErrorAlert>
       <v-flex class="align-start">
-        <v-card dark color="black darken-1">
-          <v-card-title>
-            <v-combobox
-              v-model="filter.keyWords"
-              chips
-              clearable
-              hide-details
-              label="Pesquise por palavras chave"
-              prepend-inner-icon="search"
-              multiple
-              solo
-              append-icon=""
-              @click="expand = true"
-            >
-              <template v-slot:selection="{ attrs, item, select, selected }">
-                <v-chip
-                  v-bind="attrs"
-                  :input-value="selected"
-                  close
-                  @click="select"
-                  @click:close="removeKeyWords(item)"
-                >
-                  <strong>{{ item }}</strong
-                  >&nbsp;
-                </v-chip>
-              </template>
-            </v-combobox>
-          </v-card-title>
-          <v-expand-transition>
-            <v-card-text v-show="expand">
+        <v-expansion-panels
+          v-model="panel"
+          multiple
+          dark
+          color="black darken-1"
+        >
+          <v-expansion-panel>
+            <v-expansion-panel-header hide-actions dark color="black darken-1">
+              <v-combobox
+                v-model="filter.keyWords"
+                chips
+                clearable
+                hide-details
+                label="Pesquise por palavras chave"
+                prepend-inner-icon="search"
+                multiple
+                solo
+                append-icon=""
+                @click="expand = true"
+              >
+                <template v-slot:selection="{ attrs, item, select, selected }">
+                  <v-chip
+                    v-bind="attrs"
+                    :input-value="selected"
+                    close
+                    @click="select"
+                    @click:close="removeKeyWords(item)"
+                  >
+                    <strong>{{ item }}</strong
+                    >&nbsp;
+                  </v-chip>
+                </template>
+              </v-combobox>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content dark color="black darken-1">
               <v-row>
                 <v-col cols="12" sm="6">
                   <v-select
@@ -61,13 +66,12 @@
                   ></v-select>
                 </v-col>
               </v-row>
-
-              <v-card-actions>
-                <v-btn dark block grey @click="search"> Pesquisar </v-btn>
-              </v-card-actions>
-            </v-card-text>
-          </v-expand-transition>
-        </v-card>
+              <v-btn dark block grey @click="search">
+                Pesquisar
+              </v-btn>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
 
         <v-divider class="mt-5 mb-5"></v-divider>
 

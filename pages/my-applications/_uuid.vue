@@ -87,8 +87,10 @@
             <div>
               <div>
                 <strong>
-                  {{ candidature.job.title }} -
-                  {{ candidature.job.contractType }}
+                  <h3>
+                    {{ candidature.job.title }} -
+                    {{ candidature.job.contractType }}
+                  </h3>
                 </strong>
               </div>
               <div>
@@ -128,7 +130,7 @@
           style="height: 55vh; max-height: 55vh;"
         >
           <v-card-title class="elevation-5 text-center">
-            <h2>Mensagens</h2>
+            <h3>Mensagens</h3>
           </v-card-title>
           <v-card-text
             ref="messagesContent"

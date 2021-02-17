@@ -2,6 +2,16 @@
   <div>
     <v-row>
       <v-col>
+        <v-btn dark :to="`/candidates/${candidatureUuid}`">
+          <span>
+            <v-icon>mdi-arrow-left</v-icon>
+            Voltar
+          </span>
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
         <v-card v-if="candidature">
           <v-card-title style="cursor: pointer;" @click="revealer()">
             <div>
@@ -43,12 +53,7 @@
             </v-card>
           </v-expand-transition>
           <v-col>
-            <v-stepper
-              v-if="candidature"
-              v-model="e1"
-              class="elevation-0"
-              alt-labels
-            >
+            <v-stepper v-if="candidature" v-model="e1" class="elevation-0">
               <v-stepper-header>
                 <v-stepper-step step="1" complete>
                   Houve interesse na sua vaga!
@@ -122,7 +127,7 @@
       <v-col lg="6" md="12" sm="12" xs="12">
         <v-card height="100%" class="fill-height">
           <v-card-title>
-            <h1>Detalhes do candidato</h1>
+            <h3>Detalhes do candidato</h3>
           </v-card-title>
           <v-card-text v-if="candidature">
             <v-list-item>
@@ -149,7 +154,7 @@
           style="height: 55vh; max-height: 55vh;"
         >
           <v-card-title class="elevation-5">
-            <h1>Mensagens</h1>
+            <h3>Mensagens</h3>
           </v-card-title>
           <v-card-text
             ref="messagesContent"
@@ -224,9 +229,13 @@ export default {
       msg: null,
       connected: false,
       stompClient: null,
+      jobUuid: null,
+      candidateUuid: null,
     }
   },
   async mounted() {
+    this.jobUuid = this.$route.params.jobuuid
+    this.candidateUuid = this.$route.params.candidateuuid
     await this.load()
     await this.loadMessages()
     this.openChat()
@@ -283,10 +292,8 @@ export default {
       }
     },
     async load() {
-      const jobUuid = this.$route.params.jobuuid
-      const candidateUuid = this.$route.params.candidateuuid
       await this.$api
-        .get(`private/my-jobs/${jobUuid}/candidates/${candidateUuid}`)
+        .get(`private/my-jobs/${this.jobUuid}/candidates/${this.candidateUuid}`)
         .then((res) => {
           this.candidature = res.data
         })
