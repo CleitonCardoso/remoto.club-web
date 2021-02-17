@@ -166,9 +166,18 @@
               <span v-if="item.me" class="black--text mr-3">
                 <v-chip>{{ item.msg }}</v-chip>
               </span>
-              <v-avatar :color="item.me ? 'black' : 'grey'" size="36">
-                <span class="white--text">{{ item.from[0] }}</span>
-              </v-avatar>
+              <v-tooltip :left="item.me" :right="!item.me">
+                <template v-slot:activator="{ on }">
+                  <v-avatar
+                    :color="item.me ? 'black' : 'grey'"
+                    size="36"
+                    v-on="on"
+                  >
+                    <span class="white--text">{{ item.from[0] }}</span>
+                  </v-avatar>
+                </template>
+                <span>{{ item.from }}</span>
+              </v-tooltip>
               <span v-if="!item.me" class="blue--text ml-3">
                 <v-chip>{{ item.msg }}</v-chip>
               </span>
@@ -219,6 +228,7 @@ export default {
   },
   async mounted() {
     await this.load()
+    await this.loadMessages()
     this.openChat()
   },
   methods: {
@@ -292,9 +302,35 @@ export default {
           this.$refs['message-alert'].showAlert()
         })
     },
+    async loadMessages() {
+      const loggedUserUuid = this.$auth.user.uuid
+      const candidatureUuid = this.candidature.uuid
+      await this.$api
+        .get(`private/messages/candidature/${candidatureUuid}`)
+        .then((res) => {
+          res.data.forEach((message) => {
+            this.chat.push({
+              from: message.sender,
+              msg: message.content,
+              me: loggedUserUuid === message.loginUuid,
+            })
+          })
+        })
+        .catch((err) => {
+          let message = 'Houve um erro inesperado.'
+          if (err.response && err.response.status === 400) {
+            message = err.response.data.message
+          }
+
+          this.notification.title = 'Erro'
+          this.notification.description = message
+          this.notification.type = 'error'
+          this.$refs['message-alert'].showAlert()
+        })
+      this.scrollToBottom()
+    },
     openChat() {
       const loggedUserUuid = this.$auth.user.uuid
-      const messagesContentElement = this.$refs.messagesContent
       this.socket = new SockJS(
         `${
           this.$api.defaults.baseURL
@@ -317,10 +353,7 @@ export default {
                 me: loggedUserUuid === message.loginUuid,
               })
               this.msg = null
-              this.$nextTick(() => {
-                messagesContentElement.scrollTop =
-                  messagesContentElement.scrollHeight
-              })
+              this.scrollToBottom()
             }
           )
         },
@@ -329,6 +362,13 @@ export default {
           this.connected = false
         }
       )
+    },
+    scrollToBottom() {
+      const messagesContentElement = this.$refs.messagesContent
+      if (messagesContentElement)
+        this.$nextTick(() => {
+          messagesContentElement.scrollTop = messagesContentElement.scrollHeight
+        })
     },
   },
 }
