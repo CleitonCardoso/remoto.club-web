@@ -6,14 +6,9 @@
         <v-card class="elevation-12">
           <v-toolbar dark flat>
             <v-toolbar-title>
-              <router-link
-                to="/"
-                style="text-decoration: none; color: inherit;"
+              <span class="title ml-3 mr-5 text--darken-4"
+                >Configuração de servidor de email</span
               >
-                <span class="title ml-3 mr-5 text--darken-4"
-                  >Configuração de servidor de email</span
-                >
-              </router-link>
             </v-toolbar-title>
           </v-toolbar>
           <v-card-text>

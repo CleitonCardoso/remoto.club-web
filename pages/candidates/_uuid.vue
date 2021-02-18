@@ -6,12 +6,7 @@
         <v-card class="elevation-12">
           <v-toolbar dark flat>
             <v-toolbar-title>
-              <router-link
-                to="/"
-                style="text-decoration: none; color: inherit;"
-              >
-                <span class="title ml-3 mr-5 text--darken-4">Candidatos</span>
-              </router-link>
+              <span class="title ml-3 mr-5 text--darken-4">Candidatos</span>
             </v-toolbar-title>
           </v-toolbar>
           <v-card-text>

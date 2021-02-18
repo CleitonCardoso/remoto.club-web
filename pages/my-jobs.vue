@@ -73,7 +73,11 @@
 
         <v-divider class="mt-5 mb-5"></v-divider>
 
-        <v-row v-if="this.jobs.length < 1" align="center" justify="center">
+        <v-row
+          v-if="this.applications.length < 1"
+          align="center"
+          justify="center"
+        >
           <v-col>
             <v-card elevation="1">
               <v-card-text class="text-center">
@@ -95,14 +99,14 @@
         </v-row>
 
         <v-pagination
-          v-if="this.jobs.length > 0"
+          v-if="this.applications.length > 0"
           v-model="pageIndex"
           dark
           :length="resultSize"
           @input="nextPage"
         ></v-pagination>
 
-        <div v-if="this.loading" class="text-center ma-5">
+        <div v-if="loading" class="text-center ma-5">
           <v-progress-circular
             :size="100"
             :width="10"
@@ -111,40 +115,51 @@
           ></v-progress-circular>
         </div>
 
-        <v-row v-for="(job, index) in jobs" :key="`job-${index}`">
+        <v-row
+          v-for="(application, index) in applications"
+          :key="`job-${index}`"
+        >
           <v-col>
             <v-card
               dark
               :color="
-                job.jobStatus === 'CLOSED' ? 'grey darken-1' : 'black darken-1'
+                application.job.jobStatus === 'CLOSED'
+                  ? 'grey darken-1'
+                  : 'black darken-1'
               "
               elevation="5"
             >
               <v-card-title
-                >{{ job.title }} - {{ job.contractType }}</v-card-title
+                >{{ application.job.title }} -
+                {{ application.job.contractType }}</v-card-title
               >
               <v-card-subtitle
-                >{{ job.company }}
-                <span v-if="job.officeLocation">
-                  | {{ job.officeLocation }}</span
+                >{{ application.job.company }}
+                <span v-if="application.job.officeLocation">
+                  | {{ application.job.officeLocation }}</span
                 ></v-card-subtitle
               >
 
               <v-card-text>
                 <div class="subtitle-1">
-                  Nível: <strong>{{ job.experienceRequired }}</strong>
+                  Nível:
+                  <strong>{{ application.job.experienceRequired }}</strong>
                 </div>
                 <div class="subtitle-1">
                   Faixa salarial mínima:
                   <strong>
                     {{
-                      format(job.salary) + '/' + getCompensationTypeLabel(job)
+                      format(application.job.salary) +
+                      '/' +
+                      getCompensationTypeLabel(application.job)
                     }}</strong
                   >
                 </div>
 
                 <div class="my-4">
-                  <p style="white-space: pre-wrap;">{{ job.description }}</p>
+                  <p style="white-space: pre-wrap;">
+                    {{ application.job.description }}
+                  </p>
                 </div>
               </v-card-text>
               <v-card-actions>
@@ -152,27 +167,27 @@
                 <v-btn
                   dark
                   grey
-                  :disabled="job.jobStatus === 'CLOSED'"
-                  @click="edit(job.uuid)"
+                  :disabled="application.job.jobStatus === 'CLOSED'"
+                  @click="edit(application.job.uuid)"
                 >
                   Editar
                 </v-btn>
-                <v-btn dark grey @click="openCandidates(job.uuid)">
+                <v-btn dark grey @click="openCandidates(application.job.uuid)">
                   Ver candidatos
                 </v-btn>
                 <v-btn
-                  v-if="job.jobStatus !== 'CLOSED'"
+                  v-if="application.job.jobStatus !== 'CLOSED'"
                   dark
                   grey
-                  @click="closeJob(job.uuid)"
+                  @click="closeJob(application.job.uuid)"
                 >
                   Fechar vaga
                 </v-btn>
                 <v-btn
-                  v-if="job.jobStatus === 'CLOSED'"
+                  v-if="application.job.jobStatus === 'CLOSED'"
                   dark
                   grey
-                  @click="reopenJob(job.uuid)"
+                  @click="reopenJob(application.job.uuid)"
                 >
                   Reabrir vaga
                 </v-btn>
@@ -181,7 +196,7 @@
           </v-col>
         </v-row>
         <v-pagination
-          v-if="this.jobs.length > 0"
+          v-if="this.applications.length > 0"
           v-model="pageIndex"
           dark
           :length="resultSize"
@@ -211,7 +226,7 @@ export default {
       loading: false,
       pageIndex: 1,
       resultSize: 10,
-      jobs: [],
+      applications: [],
       filter: {
         keyWords: [],
         contractTypes: [],
@@ -256,9 +271,9 @@ export default {
       params['result-size'] = 10
 
       await this.$api
-        .get(`private/my-jobs`, { params })
+        .get(`private/my-applications/findAllByFilterAndTenant`, { params })
         .then((res) => {
-          this.jobs = res.data.content
+          this.applications = res.data.content
           this.loading = false
           this.resultSize = res.data.totalPages
         })
@@ -273,6 +288,7 @@ export default {
           this.notification.type = 'error'
           this.$refs['message-alert'].showAlert()
         })
+      console.log(this.applications)
     },
     removeKeyWords(item) {
       this.filter.keyWords.splice(this.filter.keyWords.indexOf(item), 1)
