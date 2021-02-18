@@ -53,20 +53,20 @@
             </v-card>
           </v-expand-transition>
           <v-col>
-            <v-stepper v-if="candidature" v-model="e1" class="elevation-0">
+            <v-stepper
+              v-if="candidature"
+              v-model="currentStep"
+              class="elevation-0"
+            >
               <v-stepper-header>
                 <v-stepper-step step="1" complete>
-                  Houve interesse na sua vaga!
+                  Candidatura recebida
                 </v-stepper-step>
 
                 <v-divider></v-divider>
 
                 <v-stepper-step
-                  :complete="
-                    ['ACCEPTED', 'OFFERED', 'HIRED'].includes(
-                      candidature.status
-                    )
-                  "
+                  :complete="['OFFERED', 'HIRED'].includes(candidature.status)"
                   step="2"
                 >
                   Conhecendo melhor o candidato
@@ -75,7 +75,7 @@
                 <v-divider></v-divider>
 
                 <v-stepper-step
-                  :complete="['OFFERED', 'HIRED'].includes(candidature.status)"
+                  :complete="['HIRED'].includes(candidature.status)"
                   step="3"
                 >
                   Hora da oferta
@@ -101,7 +101,7 @@
                   height="200px"
                 ></v-card>
 
-                <v-btn @click="e1 = 3"> Continue </v-btn>
+                <v-btn @click="currentStep = 3"> Continue </v-btn>
 
                 <v-btn text> Cancel </v-btn>
               </v-stepper-content>
@@ -113,7 +113,7 @@
                   height="200px"
                 ></v-card>
 
-                <v-btn color="primary" @click="e1 = 1"> Continue </v-btn>
+                <v-btn color="primary" @click="currentStep = 1"> Continue </v-btn>
 
                 <v-btn text> Cancel </v-btn>
               </v-stepper-content>
@@ -126,21 +126,102 @@
     <v-row>
       <v-col lg="6" md="12" sm="12" xs="12">
         <v-card height="100%" class="fill-height">
-          <v-card-title>
-            <h3>Detalhes do candidato</h3>
+          <v-card-title class="elevation-5 text-center">
+            <v-col>
+              <h3>Detalhes do candidato</h3>
+            </v-col>
+            <v-col class="text-right">
+              <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn dark v-bind="attrs" v-on="on">
+                    <span>
+                      Ações
+                      <v-icon>mdi-menu</v-icon>
+                    </span>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item @click="nextStep">
+                    <v-list-item-title>
+                      Aprovar para próxima etapa
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="previousStep">
+                    <v-list-item-title>
+                      Voltar a etapa anterior
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="reject">
+                    <v-list-item-title>
+                      Reprovar
+                    </v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-col>
           </v-card-title>
           <v-card-text v-if="candidature">
             <v-list-item>
               <v-list-item-content>
                 <v-list-item-title>
-                  {{ candidature.candidate.name }}
+                  <strong>
+                    {{ candidature.candidate.name }}
+                  </strong>
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
+
             <v-list-item>
               <v-list-item-content>
                 <v-list-item-title>
-                  <a :href="candidature.candidate.linkedInUrl">LinkedIn</a>
+                  <v-btn
+                    text
+                    color="blue"
+                    :href="candidature.candidate.linkedInUrl"
+                    target="_blank"
+                    :disabled="!candidature.candidate.linkedInUrl"
+                  >
+                    <span>
+                      <v-icon>mdi-linkedin</v-icon>
+                      LinkedIn
+                    </span>
+                  </v-btn>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>
+                  <v-btn
+                    text
+                    color="blue"
+                    :to="candidature.candidate.linkedinUrl"
+                    :disabled="!candidature.candidate.githubUrl"
+                  >
+                    <span>
+                      <v-icon>mdi-github</v-icon>
+                      GitHub
+                    </span>
+                  </v-btn>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>
+                  <v-btn
+                    text
+                    color="blue"
+                    :to="candidature.candidate.linkedinUrl"
+                    :disabled="!candidature.candidate.facebookUrl"
+                  >
+                    <span>
+                      <v-icon>mdi-facebook</v-icon>
+                      Facebook
+                    </span>
+                  </v-btn>
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
@@ -218,7 +299,7 @@ export default {
   middleware: 'auth',
   data() {
     return {
-      e1: 1,
+      currentStep: 2,
       candidature: null,
       messages: [],
       reveal: false,
@@ -385,6 +466,18 @@ export default {
         this.$nextTick(() => {
           messagesContentElement.scrollTop = messagesContentElement.scrollHeight
         })
+    },
+    nextStep() {
+      this.candidature.status = 'APPLIED'
+      this.currentStep = 2
+    },
+    previousStep() {
+      this.candidature.status = 'APPLIED'
+      this.currentStep = 2
+    },
+    reject() {
+      this.candidature.status = 'APPLIED'
+      this.currentStep = 2
     },
   },
 }

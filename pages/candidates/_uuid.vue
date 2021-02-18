@@ -79,8 +79,9 @@ export default {
       candidates: [],
       headers: [
         { text: 'Nome', value: 'name' },
-        { text: 'Url linkedin', value: 'linkedInUrl' },
-        { text: 'Ações', value: 'actions', sortable: false },
+        { text: 'LinkedIn', value: 'linkedInUrl' },
+        { text: 'Status', value: 'candidatureStatus' },
+        { text: 'Data aplicação', value: 'dateApplied' },
       ],
       notification: {
         title: '',

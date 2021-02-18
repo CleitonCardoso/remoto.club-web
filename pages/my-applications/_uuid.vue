@@ -83,7 +83,7 @@
     <v-row v-if="candidature">
       <v-col>
         <v-card height="100%" class="fill-height">
-          <v-card-title>
+          <v-card-title class="elevation-5 text-center">
             <div>
               <div>
                 <strong>
