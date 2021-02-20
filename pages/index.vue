@@ -52,11 +52,12 @@
         </v-layout>
       </section>
       <section>
-        <v-container grid-list-xl>
-          <v-layout justify-center row wrap class="my-5">
-            <v-flex xs12 md4>
+        <v-container fluid class="align-start flex-column" fill-height>
+          <v-row>
+            <v-col>
               <v-card
-                class="elevation-0 text-center"
+                height="100%"
+                class="elevation-0 text-center justify-center mx-5"
                 style="background-color: rgba(0, 0, 0, 0.8);"
                 dark
               >
@@ -66,7 +67,7 @@
                       <v-icon style="font-size: 8vh;">device_hub</v-icon>
                     </v-label>
 
-                    <div style="font-size: 3vh;">
+                    <div style="font-size: 3vh; word-break: break-word;">
                       Um novo hub de profissionais de TI
                     </div>
                   </v-flex>
@@ -77,10 +78,11 @@
                   <strong>boas oportunidades de trabalho</strong>.
                 </v-card-text>
               </v-card>
-            </v-flex>
-            <v-flex xs12 md4>
+            </v-col>
+            <v-col>
               <v-card
-                class="elevation-0"
+                height="100%"
+                class="elevation-0 text-center justify-center mx-5"
                 style="background-color: rgba(0, 0, 0, 0.8);"
                 dark
               >
@@ -89,7 +91,7 @@
                     <v-label>
                       <v-icon style="font-size: 8vh;">house</v-icon>
                     </v-label>
-                    <div style="font-size: 3vh;">
+                    <div style="font-size: 3vh; word-break: break-word;">
                       Uma nova forma de trabalhar
                     </div>
                   </v-flex>
@@ -104,10 +106,11 @@
                   apenas em vagas dessa natureza.
                 </v-card-text>
               </v-card>
-            </v-flex>
-            <v-flex xs12 md4>
+            </v-col>
+            <v-col>
               <v-card
-                class="elevation-0"
+                height="100%"
+                class="elevation-0 text-center justify-center mx-5"
                 style="background-color: rgba(0, 0, 0, 0.8);"
                 dark
               >
@@ -116,7 +119,9 @@
                     <v-label>
                       <v-icon style="font-size: 8vh;">money_off</v-icon>
                     </v-label>
-                    <div style="font-size: 3vh;">Gratuito!</div>
+                    <div style="font-size: 3vh; word-break: break-word;">
+                      Gratuito!
+                    </div>
                   </v-flex>
                 </v-card-title>
                 <v-card-text class="text-center">
@@ -125,44 +130,45 @@
                   uma <strong>vaga certeira</strong>.
                 </v-card-text>
               </v-card>
-            </v-flex>
-          </v-layout>
+            </v-col>
+          </v-row>
         </v-container>
       </section>
-      <section id="contato" style="margin-top: 30px;">
-        <v-container grid-list-xl>
-          <v-layout justify-center row wrap class="my-5">
-            <v-flex xs12 md6>
-              <v-card
-                class="elevation-0 text-center"
-                style="background-color: rgba(0, 0, 0, 0.8);"
-                dark
+      <section id="contato" style="margin-top: 10vh;">
+        <v-container fluid class="flex-column" fill-height>
+          <v-card
+            class="elevation-0"
+            width="50%"
+            style="background-color: rgba(0, 0, 0, 0.8);"
+            dark
+          >
+            <v-card-title
+              class="align-center justify-center"
+              style="padding-bottom: 10%;"
+            >
+              <div style="font-size: 3vh;">
+                <a class="contact-link" href="#contato">
+                  Entre em contato pelo WhatsApp!
+                </a>
+              </div>
+            </v-card-title>
+            <v-spacer></v-spacer>
+            <v-card-text>
+              <v-text-field
+                v-model="contact.subject"
+                label="Motivo do contato"
+              ></v-text-field>
+              <v-textarea
+                v-model="contact.details"
+                label="Conte-nos mais..."
+              ></v-textarea>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn light block @click="sendPostToWhatsapp"
+                >Iniciar conversa</v-btn
               >
-                <v-card-title primary-title class="layout">
-                  <v-flex class="text-center">
-                    <div style="font-size: 3vh;">
-                      <a class="contact-link" href="#contato">
-                        Entre em contato pelo WhatsApp!
-                      </a>
-                    </div>
-                  </v-flex>
-                </v-card-title>
-                <v-card-text>
-                  <v-text-field
-                    v-model="contact.subject"
-                    label="Motivo do contato"
-                  ></v-text-field>
-                  <v-textarea
-                    v-model="contact.details"
-                    label="Conte-nos mais..."
-                  ></v-textarea>
-                  <v-btn light @click="sendPostToWhatsapp"
-                    >Iniciar conversa</v-btn
-                  >
-                </v-card-text>
-              </v-card>
-            </v-flex>
-          </v-layout>
+            </v-card-actions>
+          </v-card>
         </v-container>
       </section>
     </v-container>

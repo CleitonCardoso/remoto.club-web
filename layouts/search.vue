@@ -71,7 +71,7 @@
     </v-navigation-drawer>
 
     <v-main>
-      <v-container fluid class="grey lighten-4 fill-height align-start">
+      <v-container fluid class="grey lighten-4 align-start" fill-height>
         <v-row>
           <v-col v-if="!isMobile" md="2">
             <!-- Ad -->
@@ -84,8 +84,8 @@
           </v-col>
         </v-row>
       </v-container>
-      <Footer></Footer>
     </v-main>
+    <Footer></Footer>
   </v-app>
 </template>
 
@@ -181,7 +181,7 @@ export default {
       }
     },
     onResize() {
-      this.isMobile = window.innerWidth < 600
+      this.isMobile = window.innerWidth < 958
     },
   },
 }

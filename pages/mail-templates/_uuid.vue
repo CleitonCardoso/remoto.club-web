@@ -197,7 +197,6 @@ export default {
     },
     testTemplate() {
       this.$refs.emailEditor.editor.exportHtml((data) => {
-        debugger
         this.$api
           .post(`private/admin/mail-template/test`, data.html, {
             headers: { 'Content-Type': 'text/plain' },

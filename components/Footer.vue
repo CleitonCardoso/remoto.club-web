@@ -1,8 +1,8 @@
 <template>
-  <v-footer absolute>
+  <v-footer>
     <v-flex class="text-center align-center">
       <a
-        href="/"
+        href="/#contato"
         style="text-decoration: none; color: inherit;"
         rel="noopener noreferrer"
       >

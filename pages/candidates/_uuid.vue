@@ -3,6 +3,23 @@
     <v-layout row wrap>
       <ErrorAlert ref="message-alert" :notification="notification"></ErrorAlert>
       <v-flex class="align-start">
+        <v-spacer></v-spacer>
+        <v-row>
+          <v-col>
+            <v-btn
+              dark
+              :to="
+                this.$auth.user.role === 'ADMIN' ? '/admin-jobs' : '/my-jobs'
+              "
+            >
+              <span>
+                <v-icon>mdi-arrow-left</v-icon>
+                Voltar
+              </span>
+            </v-btn>
+          </v-col>
+        </v-row>
+
         <v-card class="elevation-12">
           <v-toolbar dark flat>
             <v-toolbar-title>
@@ -11,12 +28,14 @@
           </v-toolbar>
           <v-card-text>
             <v-data-table
+              class="row-pointer"
               :headers="headers"
               item-key="uuid"
               :items="candidates"
               :items-per-page="20"
+              @click:row="openCandidate"
             >
-              <template v-slot:[`item.actions`]="{ item }">
+              <!-- <template v-slot:[`item.actions`]="{ item }">
                 <v-select
                   v-model="select"
                   :items="items"
@@ -27,7 +46,7 @@
                   return-object
                   single-line
                 ></v-select>
-              </template>
+              </template> -->
 
               <template v-slot:[`item.linkedInUrl`]="{ item }">
                 <a :href="item.linkedInUrl" target="_blank">
@@ -36,17 +55,6 @@
               </template>
             </v-data-table>
           </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              dark
-              class="mr-3"
-              :to="
-                this.$auth.user.role === 'ADMIN' ? '/admin-jobs' : '/my-jobs'
-              "
-              >Voltar</v-btn
-            >
-          </v-card-actions>
         </v-card>
       </v-flex>
     </v-layout>
@@ -62,11 +70,13 @@ export default {
   data() {
     return {
       dialog: false,
+      jobUuid: null,
       candidates: [],
       headers: [
         { text: 'Nome', value: 'name' },
-        { text: 'Url linkedin', value: 'linkedInUrl' },
-        { text: 'Ações', value: 'actions', sortable: false },
+        { text: 'LinkedIn', value: 'linkedInUrl' },
+        { text: 'Status', value: 'candidatureStatus' },
+        { text: 'Data aplicação', value: 'dateApplied' },
       ],
       notification: {
         title: '',
@@ -80,13 +90,13 @@ export default {
   },
   methods: {
     load() {
-      const uuid = this.$route.params.uuid
+      this.jobUuid = this.$route.params.uuid
       const isAdmin = this.$auth.user.role === 'ADMIN'
       this.$api
         .get(
           `private` +
             (isAdmin ? `/admin-jobs/` : `/my-jobs/`) +
-            uuid +
+            this.jobUuid +
             `/candidates`
         )
         .then((res) => {
@@ -104,6 +114,14 @@ export default {
           this.$refs['message-alert'].showAlert()
         })
     },
+    openCandidate(candidate) {
+      window.open(`/candidate/${this.jobUuid}/${candidate.uuid}`, '_blank')
+    },
   },
 }
 </script>
+<style scoped>
+.row-pointer >>> tbody tr :hover {
+  cursor: pointer;
+}
+</style>
