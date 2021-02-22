@@ -12,17 +12,12 @@
           sm="6"
           lg="4"
         >
-          <v-card class="elevation-12">
+          <v-card v-if="!showConfirmCard" class="elevation-12">
             <v-toolbar dark flat>
               <v-toolbar-title>
-                <router-link
-                  to="/"
-                  style="text-decoration: none; color: inherit;"
+                <span class="title ml-3 mr-5 text--darken-4"
+                  >Remoto.<span class="font-weight-light">Club</span></span
                 >
-                  <span class="title ml-3 mr-5 text--darken-4"
-                    >Remoto.<span class="font-weight-light">Club</span></span
-                  >
-                </router-link>
                 <span>
                   Cadastro<span v-if="registrationType"
                     >: {{ getRegistrationTypeLabel }}</span
@@ -169,6 +164,27 @@
               >
             </v-card-actions>
           </v-card>
+          <v-card v-if="showConfirmCard" class="elevation-12">
+            <v-toolbar dark flat>
+              <v-toolbar-title>
+                <span class="title ml-3 mr-5 text--darken-4"
+                  >Remoto.<span class="font-weight-light">Club</span></span
+                >
+              </v-toolbar-title>
+            </v-toolbar>
+            <v-card-text>
+              <span class="title text--darken-4">
+                Sua conta foi criada, você deve receber em alguns instantes um
+                email de confirmação.
+              </span>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn to="/login" class="mr-3" dark>
+                Login
+              </v-btn>
+            </v-card-actions>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
@@ -211,6 +227,7 @@ export default {
           /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
           'E-mail inválido',
       ],
+      showConfirmCard: false,
     }
   },
   computed: {
@@ -260,7 +277,7 @@ export default {
         this.$api
           .post(createPath, this.login)
           .then((resp) => {
-            this.$router.push('/login')
+            this.showConfirmCard = true
           })
           .catch((err) => {
             let message = 'Houve um erro inesperado.'
