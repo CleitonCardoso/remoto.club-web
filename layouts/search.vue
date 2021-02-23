@@ -1,10 +1,12 @@
 <template>
   <v-app id="keep">
     <v-app-bar app dark clipped-right color="black lighten-2">
-      <span class="title ml-3 mr-5 text--darken-4">
-        Remoto.
-        <span class="font-weight-light">Club</span>
-      </span>
+      <router-link to="/vagas" style="text-decoration: none; color: inherit;">
+        <span class="title ml-3 mr-5 text--darken-4">
+          Remoto.
+          <span class="font-weight-light">Club</span>
+        </span>
+      </router-link>
       <v-text-field
         v-if="false"
         solo-inverted
