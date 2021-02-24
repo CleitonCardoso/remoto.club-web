@@ -186,9 +186,6 @@ body {
   -ms-filter: blur(5px);
   filter: blur(5px);
 }
-#inspire {
-  background: none;
-}
 .finedTitle {
   font-weight: 900;
   text-shadow: 2px 2px #000000;
