@@ -3,12 +3,7 @@
     <v-layout row wrap>
       <ErrorAlert ref="message-alert" :notification="notification"></ErrorAlert>
       <v-flex class="align-start">
-        <v-expansion-panels
-          v-model="panel"
-          multiple
-          dark
-          color="black darken-1"
-        >
+        <v-expansion-panels multiple dark color="black darken-1">
           <v-expansion-panel>
             <v-expansion-panel-header hide-actions dark color="black darken-1">
               <v-combobox

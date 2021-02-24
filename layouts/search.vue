@@ -16,6 +16,26 @@
         prepend-inner-icon="search"
       ></v-text-field>
       <v-spacer></v-spacer>
+
+      <v-menu rounded offset-y>
+        <template v-slot:activator="{ attrs, on }">
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon>
+              mdi-bullhorn-outline
+            </v-icon>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>John Leider</v-list-item-title>
+              <v-list-item-subtitle>Founder of Vuetify</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+
       <v-app-bar-nav-icon
         class="ml-5 mr-1"
         @click="drawer = !drawer"
