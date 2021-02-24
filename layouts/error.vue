@@ -1,14 +1,27 @@
 <template>
-  <v-app dark>
-    <h1 v-if="error.statusCode === 404">{{ pageNotFound }}</h1>
-    <h1 v-else>{{ otherError }}</h1>
-    <NuxtLink to="/">Home page</NuxtLink>
-  </v-app>
+  <v-container fill-height fluid>
+    <v-row class="text-center align-center">
+      <v-col>
+        <h1 class="text-h1">
+          <strong>
+            Oops... <br />
+            essa página não existe!
+          </strong>
+        </h1>
+      </v-col>
+    </v-row>
+    <br />
+    <v-row class="text-center align-center mt-15">
+      <v-row class="text-center align-center justify-center">
+        <v-btn dark large to="/vagas">Ver outras vagas incríveis</v-btn>
+      </v-row>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 export default {
-  layout: 'clean',
+  layout: 'search',
   props: {
     error: {
       type: Object,
@@ -31,8 +44,4 @@ export default {
 }
 </script>
 
-<style scoped>
-h1 {
-  font-size: 20px;
-}
-</style>
+<style scoped></style>
