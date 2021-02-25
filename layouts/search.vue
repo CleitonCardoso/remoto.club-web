@@ -107,8 +107,8 @@
     <v-main>
       <v-container fluid class="grey lighten-4 align-start" fill-height>
         <v-row>
-          <v-col v-show="!isMobile" class="text-center mt-3">
-            <client-only>
+          <client-only>
+            <v-col v-show="!isMobile" class="text-center mt-3">
               <iframe
                 src="//rcm-na.amazon-adsystem.com/e/cm?o=1&p=14&l=ur1&category=kindle&banner=10J9VCHB18FBPQRS0D02&f=ifr&linkID=699a0c679f10d0140a53eab8aa37d4ec&t=cleitoncardos-20&tracking_id=cleitoncardos-20&new_tab=1"
                 width="160"
@@ -119,13 +119,13 @@
                 style="border: none;"
                 frameborder="0"
               ></iframe>
-            </client-only>
-          </v-col>
+            </v-col>
+          </client-only>
           <v-col md="8" xs="12" class="justify-center">
             <nuxt />
           </v-col>
-          <v-col v-show="!isMobile" class="text-center mt-3">
-            <client-only>
+          <client-only>
+            <v-col v-show="!isMobile" class="text-center mt-3">
               <iframe
                 src="//rcm-na.amazon-adsystem.com/e/cm?o=1&p=14&l=ur1&category=software&banner=1DXZZEJ8X4XD42VS1AR2&f=ifr&linkID=504967c303d4a0d61fb9c38362ef327e&t=cleitoncardos-20&tracking_id=cleitoncardos-20"
                 width="160"
@@ -136,8 +136,8 @@
                 style="border: none;"
                 frameborder="0"
               ></iframe>
-            </client-only>
-          </v-col>
+            </v-col>
+          </client-only>
         </v-row>
       </v-container>
     </v-main>
@@ -158,14 +158,16 @@ export default {
     hasUpdates: false,
   }),
   computed: {},
-
+  beforeMount() {
+    if (typeof window === 'undefined') return
+    window.removeEventListener('resize', this.onResize, { passive: true })
+  },
   beforeDestroy() {
     if (typeof window === 'undefined') return
     window.removeEventListener('resize', this.onResize, { passive: true })
   },
   mounted() {
     this.onResize()
-    window.addEventListener('resize', this.onResize, { passive: true })
 
     if (this.$auth.loggedIn) {
       if (this.$auth.user.role === 'ADMIN') {

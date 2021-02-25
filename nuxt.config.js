@@ -159,6 +159,11 @@ export default {
       },
     },
   },
+  generate: {
+    minify: {
+      collapseWhitespace: false,
+    },
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
