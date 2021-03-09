@@ -10,9 +10,14 @@
           <v-card class="elevation-12">
             <v-toolbar dark flat>
               <v-toolbar-title>
-                <span class="title ml-3 mr-5 text--darken-4"
-                  >Remoto.<span class="font-weight-light">Club</span></span
+                <router-link
+                  to="/vagas"
+                  style="text-decoration: none; color: inherit;"
                 >
+                  <span class="title ml-3 mr-5 text--darken-4"
+                    >Remoto.<span class="font-weight-light">Club</span></span
+                  >
+                </router-link>
               </v-toolbar-title>
             </v-toolbar>
             <v-card-text>

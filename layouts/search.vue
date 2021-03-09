@@ -22,28 +22,56 @@
           rounded
           offset-y
           :nudge-width="100"
+          height="100px"
+          class="mt-11"
+          :close-on-content-click="false"
         >
           <template v-slot:activator="{ attrs, on }">
             <v-btn icon v-bind="attrs" v-on="on">
               <v-icon v-if="!hasUpdates">
                 mdi-bullhorn-outline
               </v-icon>
-              <v-icon v-if="hasUpdates" color="green">
-                mdi-bullhorn
-              </v-icon>
+              <v-badge v-if="hasUpdates" color="red" dot>
+                <v-icon>
+                  mdi-bullhorn
+                </v-icon>
+              </v-badge>
             </v-btn>
           </template>
 
-          <v-list>
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>Em breve</v-list-item-title>
-                <v-list-item-subtitle
-                  >Embreve aqui você poderá ver as atualizações sobre vagas e
-                  candidatos</v-list-item-subtitle
-                >
-              </v-list-item-content>
-            </v-list-item>
+          <v-list class="notification-wrapper">
+            <v-list-item-group>
+              <v-list-item
+                v-for="(notification, index) in notifications"
+                :key="`notification-${index}`"
+                class="elevation-1"
+                @click="openNotification(notification)"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>{{
+                    notification.title
+                  }}</v-list-item-title>
+                  <v-list-item-subtitle class="text-wrap">
+                    {{ notification.description }}
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item
+                class="elevation-1"
+                align="center"
+                to="/notifications"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <strong>Ver mais</strong>
+                  </v-list-item-title>
+                  <v-list-item-subtitle class="text-wrap">
+                    <strong>Clique para ver todas as notificações</strong>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
           </v-list>
         </v-menu>
       </client-only>
@@ -151,12 +179,15 @@ import Footer from '~/components/Footer'
 export default {
   name: 'Search',
   components: { Footer },
-  data: () => ({
-    drawer: null,
-    items: [],
-    isMobile: false,
-    hasUpdates: false,
-  }),
+  data() {
+    return {
+      drawer: null,
+      items: [],
+      isMobile: false,
+      hasUpdates: false,
+      notifications: [],
+    }
+  },
   computed: {},
   beforeMount() {
     if (typeof window === 'undefined') return
@@ -225,11 +256,20 @@ export default {
           { icon: 'mdi-logout', text: 'Sair', exit: true },
         ]
       }
+
+      this.loadNotifications()
+
+      setInterval(() => {
+        this.loadNotifications()
+      }, 60000)
     } else {
       this.items = [{ icon: 'mdi-login', text: 'Entrar', to: '/login' }]
     }
   },
   methods: {
+    openNotification(notification) {
+      this.$router.push(notification.urlPath)
+    },
     logout() {
       this.$auth.logout()
       if (this.$route.path === '/') {
@@ -239,9 +279,35 @@ export default {
         this.$router.go()
       }
     },
+    async loadNotifications() {
+      await this.$api
+        .get(`private/notification`)
+        .then((res) => {
+          this.notifications = res.data.content
+          this.hasUpdates = this.notifications.some(
+            (notification) => notification.read === false
+          )
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
     onResize() {
       this.isMobile = window.innerWidth < 958
     },
   },
 }
 </script>
+<style lang="css">
+.notification-wrapper {
+  max-width: 300px;
+  max-height: 500px;
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+.notification-wrapper::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+</style>

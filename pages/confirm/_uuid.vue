@@ -8,9 +8,16 @@
             <v-card class="elevation-0 transparent text-center" dark>
               <v-card-title class="layout justify-center">
                 <div style="height: 50%; margin-top: 15%;">
-                  <span style="text-shadow: 3px 2px #000000; font-size: 10vw;">
-                    Remoto.<span class="font-weight-light">Club</span>
-                  </span>
+                  <router-link
+                    to="/vagas"
+                    style="text-decoration: none; color: inherit;"
+                  >
+                    <span
+                      style="text-shadow: 3px 2px #000000; font-size: 10vw;"
+                    >
+                      Remoto.<span class="font-weight-light">Club</span>
+                    </span>
+                  </router-link>
                 </div>
               </v-card-title>
               <v-card-text style="text-center">
