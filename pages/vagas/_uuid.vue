@@ -3,90 +3,7 @@
     <v-layout row wrap>
       <ErrorAlert ref="message-alert" :notification="notification"></ErrorAlert>
       <v-flex class="align-start">
-        <client-only>
-          <v-expansion-panels multiple dark color="black darken-1">
-            <v-expansion-panel>
-              <v-expansion-panel-header
-                hide-actions
-                dark
-                color="black darken-1"
-              >
-                <v-combobox
-                  v-model="filter.keyWords"
-                  chips
-                  clearable
-                  hide-details
-                  label="Pesquise por palavras chave"
-                  prepend-inner-icon="search"
-                  multiple
-                  solo
-                  append-icon=""
-                  @click="expand = true"
-                >
-                  <template
-                    v-slot:selection="{ attrs, item, select, selected }"
-                  >
-                    <v-chip
-                      v-bind="attrs"
-                      :input-value="selected"
-                      close
-                      @click="select"
-                      @click:close="removeKeyWords(item)"
-                    >
-                      <strong>{{ item }}</strong
-                      >&nbsp;
-                    </v-chip>
-                  </template>
-                </v-combobox>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content dark color="black darken-1">
-                <v-row>
-                  <v-col cols="12" sm="6">
-                    <v-select
-                      v-model="filter.contractTypes"
-                      :items="contractTypes"
-                      label="Tipo de contrato"
-                      item-text="text"
-                      item-value="value"
-                      dark
-                      multiple
-                      solo
-                      dense
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="12" sm="6">
-                    <v-select
-                      v-model="filter.experienceTypes"
-                      :items="experienceTypes"
-                      label="Experiência"
-                      item-text="text"
-                      item-value="value"
-                      dark
-                      multiple
-                      solo
-                      dense
-                    ></v-select>
-                  </v-col>
-                </v-row>
-                <v-btn dark block grey @click="search">
-                  Pesquisar
-                </v-btn>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </client-only>
-
-        <v-divider class="mt-5 mb-5"></v-divider>
-
-        <v-pagination
-          v-if="this.jobs.length > 0"
-          v-model="pageIndex"
-          dark
-          :length="resultSize"
-          @input="nextPage"
-        ></v-pagination>
-
-        <div v-if="this.loading" class="text-center ma-5">
+        <div v-if="loading" class="text-center ma-5">
           <v-progress-circular
             :size="100"
             :width="10"
@@ -95,18 +12,13 @@
           ></v-progress-circular>
         </div>
 
-        <v-row v-for="(job, index) in jobs" :key="`job-${index}`">
+        <v-row v-if="job">
           <v-col>
             <v-card dark color="black darken-1" elevation="5">
               <v-card-title>
-                <router-link
-                  :to="`/vagas/${job.uuid}`"
-                  style="text-decoration: none; color: inherit;"
-                >
-                  <h1 class="text-h5">
-                    <strong> {{ job.title }} - {{ job.contractType }} </strong>
-                  </h1>
-                </router-link>
+                <h1 class="text-h5">
+                  <strong> {{ job.title }} - {{ job.contractType }} </strong>
+                </h1>
 
                 <v-spacer></v-spacer>
 
@@ -125,12 +37,14 @@
                   <span>Reportar vaga</span>
                 </v-tooltip>
               </v-card-title>
-              <v-card-subtitle
-                >{{ job.company }}
-                <span v-if="job.officeLocation">
-                  | {{ job.officeLocation }}</span
-                ></v-card-subtitle
-              >
+              <v-card-subtitle>
+                <strong>
+                  {{ job.company }}
+                  <span v-if="job.officeLocation">
+                    | {{ job.officeLocation }}</span
+                  >
+                </strong>
+              </v-card-subtitle>
               <v-card-text>
                 <div class="subtitle-1">
                   Nível: <strong>{{ job.experienceRequired }}</strong>
@@ -164,14 +78,6 @@
             </v-card>
           </v-col>
         </v-row>
-        <v-pagination
-          v-if="this.jobs.length > 0"
-          v-model="pageIndex"
-          dark
-          :length="resultSize"
-          class="mb-10"
-          @input="nextPage"
-        ></v-pagination>
       </v-flex>
     </v-layout>
     <v-dialog v-model="applyModal" width="500" dark color="black darken-1">
@@ -267,10 +173,7 @@ export default {
   components: { ErrorAlert },
   data() {
     return {
-      expand: false,
       loading: false,
-      pageIndex: 1,
-      resultSize: 10,
       applyModal: false,
       reportModal: false,
       linkedInUrl: '',
@@ -280,12 +183,7 @@ export default {
         reason: null,
         description: null,
       },
-      jobs: [],
-      filter: {
-        keyWords: [],
-        contractTypes: [],
-        experienceTypes: [],
-      },
+      job: {},
       contractTypes: [
         { text: 'CLT', value: 'CLT' },
         { text: 'PJ', value: 'PJ' },
@@ -314,37 +212,18 @@ export default {
     }
   },
   mounted() {
-    this.filter.keyWords = this.$route.query.keyWords
-    this.filter.contractTypes = this.$route.query.contractTypes
-    this.filter.experienceTypes = this.$route.query.experienceTypes
     this.load()
   },
   methods: {
-    nextPage(pageNumber) {
-      this.pageIndex = pageNumber
-      this.load()
-      window.scrollTo(0, 0)
-    },
-    search() {
-      this.pageIndex = 1
-      this.load()
-    },
     async load() {
       this.loading = true
-      const params = this.filter
-      params['page-index'] = this.pageIndex
-      params['result-size'] = 10
+      const uuid = this.$route.params.uuid
 
       await this.$api
-        .get(`public/jobs`, { params })
+        .get(`public/jobs/${uuid}`)
         .then((res) => {
-          this.jobs = res.data.content
+          this.job = res.data
           this.loading = false
-          this.resultSize = res.data.totalPages
-
-          this.jobs.forEach((element) => {
-            this.$set(element, 'showDescription', false)
-          })
         })
         .catch((err) => {
           let message = 'Houve um erro inesperado.'
@@ -357,11 +236,6 @@ export default {
           this.notification.type = 'error'
           this.$refs['message-alert'].showAlert()
         })
-    },
-
-    removeKeyWords(item) {
-      this.filter.keyWords.splice(this.filter.keyWords.indexOf(item), 1)
-      this.filter.keyWords = [...this.filter.keyWords]
     },
     format(value) {
       return brlFormatter.format(value)
@@ -458,6 +332,48 @@ export default {
         this.$refs['message-alert'].showAlert()
       }
     },
+  },
+  head() {
+    return {
+      title: 'Remoto.Club - ' + (this.job ? this.job.title : 'Vagas'),
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.job.description,
+        },
+        {
+          hid: 'title',
+          name: 'title',
+          content: 'Remoto.Club - ' + (this.job ? this.job.title : 'Vagas'),
+        },
+        {
+          hid: 'og:title',
+          name: 'og:title',
+          content: this.job.title,
+        },
+        {
+          hid: 'og:description',
+          name: 'og:description',
+          content: this.job.description,
+        },
+        {
+          hid: 'og:url',
+          name: 'og:url',
+          content: 'https://remoto.club/vagas/' + this.job.uuid,
+        },
+        {
+          hid: 'twitter:title',
+          name: 'twitter:title',
+          content: this.job.title,
+        },
+        {
+          hid: 'twitter:description',
+          name: 'twitter:description',
+          content: this.job.title,
+        },
+      ],
+    }
   },
 }
 </script>
