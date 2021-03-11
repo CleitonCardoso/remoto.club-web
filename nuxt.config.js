@@ -139,6 +139,7 @@ export default {
     ],
   ],
   sitemap: {
+    hostname: 'https://remoto.club/',
     routes: async () => {
       const { data } = await axios.get(
         'https://remoto-club-api.herokuapp.com/public/jobs?page-index=1&result-size=140'
