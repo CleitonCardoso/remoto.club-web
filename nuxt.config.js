@@ -2,6 +2,8 @@ import colors from 'vuetify/es5/util/colors'
 let backendHost = ''
 const applicationProfile = process.env.NODE_ENV
 
+const axios = require('axios')
+
 switch (applicationProfile) {
   case 'development':
     backendHost = 'http://localhost:8080'
@@ -121,6 +123,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/pwa',
+    '@nuxtjs/sitemap',
     // Doc: https://github.com/nuxt/content
     '@nuxt/content',
     [
@@ -135,6 +138,15 @@ export default {
       },
     ],
   ],
+  sitemap: {
+    routes: async () => {
+      const { data } = await axios.get(
+        'https://remoto-club-api.herokuapp.com/public/jobs?page-index=1&result-size=140'
+      )
+
+      return data.content.map((job) => `/vagas/${job.uuid}`)
+    },
+  },
   auth: {
     strategies: {
       local: {
