@@ -38,52 +38,61 @@ export default {
         content: 'width=device-width, initial-scale=1',
       },
       {
+        hid: 'description',
+        name: 'description',
+        property: 'description',
+        content:
+          'O seu site de classificados de vagas HomeOffice para TI.  Simples e direto.',
+      },
+      {
         hid: 'twitter:card',
         name: 'twitter:card',
+        property: 'twitter:card',
         content: 'Remoto.Club - Vagas homeOffice para TI',
       },
       { hid: 'twitter:site', name: 'twitter:site', content: '@remoto.club' },
       {
         hid: 'twitter:creator',
         name: 'twitter:creator',
+        property: 'twitter:creator',
         content: '@remoto.club',
       },
       {
         hid: 'twitter:title',
         name: 'twitter:title',
+        property: 'twitter:title',
         content: 'Remoto.Club - Vagas homeOffice para TI',
       },
       {
         hid: 'twitter:description',
         name: 'twitter:description',
+        property: 'twitter:description',
         content:
           'O seu site de classificados de vagas HomeOffice para TI.  Simples e direto.',
       },
       {
         hid: 'twitter:image',
         name: 'twitter:image',
+        property: 'twitter:image',
         content: 'https://www.remoto.club/landing/12.jpg',
       },
       {
-        hid: 'description',
-        name: 'description',
-        content:
-          'O seu site de classificados de vagas HomeOffice para TI.  Simples e direto.',
-      },
-      {
         hid: 'og:image',
+        name: 'og:image',
         property: 'og:image',
         content: 'https://www.remoto.club/landing/12.jpg',
       },
       {
         hid: 'og:site_name',
         name: 'og:site_name',
+        property: 'og:site_name',
         content: 'Remoto.Club - Vagas homeOffice para TI',
       },
       { hid: 'og:title', name: 'og:title', content: 'Remoto.Club' },
       {
         hid: 'og:description',
         name: 'og:description',
+        property: 'og:description',
         content:
           'O seu site de classificados de vagas HomeOffice para TI.  Simples e direto.',
       },
