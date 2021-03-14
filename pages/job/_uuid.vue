@@ -46,6 +46,7 @@
                 placeholder=""
                 name="Localidade"
                 type="text"
+                :rules="notEmptyRule"
               ></v-text-field>
               <v-textarea
                 v-model="job.description"
