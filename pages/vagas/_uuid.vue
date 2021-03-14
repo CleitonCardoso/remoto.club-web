@@ -340,36 +340,43 @@ export default {
         {
           hid: 'description',
           name: 'description',
+          property: 'description',
           content: this.job.description,
         },
         {
           hid: 'title',
           name: 'title',
+          property: 'title',
           content: 'Remoto.Club - ' + (this.job ? this.job.title : 'Vagas'),
         },
         {
           hid: 'og:title',
           name: 'og:title',
+          property: 'og:title',
           content: this.job.title,
         },
         {
           hid: 'og:description',
           name: 'og:description',
+          property: 'og:description',
           content: this.job.description,
         },
         {
           hid: 'og:url',
           name: 'og:url',
+          property: 'og:url',
           content: 'https://remoto.club/vagas/' + this.job.uuid,
         },
         {
           hid: 'twitter:title',
           name: 'twitter:title',
+          property: 'twitter:title',
           content: this.job.title,
         },
         {
           hid: 'twitter:description',
           name: 'twitter:description',
+          property: 'twitter:description',
           content: this.job.title,
         },
       ],
