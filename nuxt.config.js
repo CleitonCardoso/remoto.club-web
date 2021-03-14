@@ -38,13 +38,6 @@ export default {
         content: 'width=device-width, initial-scale=1',
       },
       {
-        hid: 'description',
-        name: 'description',
-        property: 'description',
-        content:
-          'O seu site de classificados de vagas HomeOffice para TI.  Simples e direto.',
-      },
-      {
         hid: 'twitter:card',
         name: 'twitter:card',
         property: 'twitter:card',
@@ -56,19 +49,6 @@ export default {
         name: 'twitter:creator',
         property: 'twitter:creator',
         content: '@remoto.club',
-      },
-      {
-        hid: 'twitter:title',
-        name: 'twitter:title',
-        property: 'twitter:title',
-        content: 'Remoto.Club - Vagas homeOffice para TI',
-      },
-      {
-        hid: 'twitter:description',
-        name: 'twitter:description',
-        property: 'twitter:description',
-        content:
-          'O seu site de classificados de vagas HomeOffice para TI.  Simples e direto.',
       },
       {
         hid: 'twitter:image',
@@ -89,13 +69,6 @@ export default {
         content: 'Remoto.Club - Vagas homeOffice para TI',
       },
       { hid: 'og:title', name: 'og:title', content: 'Remoto.Club' },
-      {
-        hid: 'og:description',
-        name: 'og:description',
-        property: 'og:description',
-        content:
-          'O seu site de classificados de vagas HomeOffice para TI.  Simples e direto.',
-      },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' },
