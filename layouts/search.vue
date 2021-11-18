@@ -137,16 +137,7 @@
         <v-row>
           <client-only>
             <v-col v-show="!isMobile" class="text-center mt-3">
-              <iframe
-                src="//rcm-na.amazon-adsystem.com/e/cm?o=1&p=14&l=ur1&category=kindle&banner=10J9VCHB18FBPQRS0D02&f=ifr&linkID=699a0c679f10d0140a53eab8aa37d4ec&t=cleitoncardos-20&tracking_id=cleitoncardos-20&new_tab=1"
-                width="160"
-                height="600"
-                scrolling="no"
-                border="0"
-                marginwidth="0"
-                style="border: none;"
-                frameborder="0"
-              ></iframe>
+              <!-- EMPTY -->
             </v-col>
           </client-only>
           <v-col md="8" xs="12" class="justify-center">
@@ -154,16 +145,7 @@
           </v-col>
           <client-only>
             <v-col v-show="!isMobile" class="text-center mt-3">
-              <iframe
-                src="//rcm-na.amazon-adsystem.com/e/cm?o=1&p=14&l=ur1&category=software&banner=1DXZZEJ8X4XD42VS1AR2&f=ifr&linkID=504967c303d4a0d61fb9c38362ef327e&t=cleitoncardos-20&tracking_id=cleitoncardos-20"
-                width="160"
-                height="600"
-                scrolling="no"
-                border="0"
-                marginwidth="0"
-                style="border: none;"
-                frameborder="0"
-              ></iframe>
+              <!-- EMPTY -->
             </v-col>
           </client-only>
         </v-row>
