@@ -9,7 +9,7 @@ switch (applicationProfile) {
     backendHost = 'http://localhost:8080'
     break
   case 'heroku':
-    backendHost = 'https://remoto-club-api.herokuapp.com'
+    backendHost = 'https://remotoclub-api-production.up.railway.app'
     break
 }
 
