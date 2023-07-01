@@ -2,6 +2,9 @@
   "name": "remoto-club",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt-ts build",
@@ -22,7 +25,7 @@
     "cookieparser": "^0.1.0",
     "js-cookie": "^2.2.1",
     "material-design-icons-iconfont": "^5.0.1",
-    "nuxt": "^2.13.0",
+    "nuxt": "^2.15.7",
     "nuxt-compress": "^3.0.0",
     "qs": "^6.9.4",
     "sockjs": "^0.3.21",
@@ -36,15 +39,15 @@
     "@nuxtjs/eslint-config-typescript": "^2.0.0",
     "@nuxtjs/eslint-module": "^2.0.0",
     "@nuxtjs/vuetify": "^1.11.2",
-    "@vue/test-utils": "^1.0.3",
+    "@vue/test-utils": "^2.0.0-rc.15",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.0.1",
     "eslint": "^7.2.0",
     "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-nuxt": "^1.0.0",
+    "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "jest": "^26.0.1",
+    "jest": "^27.0.6",
     "prettier": "^2.0.5",
     "ts-jest": "^26.1.0",
     "vue-jest": "^4.0.1"
