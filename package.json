@@ -27,10 +27,13 @@
     "material-design-icons-iconfont": "^6.7.0",
     "nuxt": "^2.17.0",
     "nuxt-compress": "^1.0.2",
+    "nvm": "^0.0.4",
     "qs": "^6.11.2",
     "sockjs": "^0.3.24",
     "sockjs-client": "^1.6.1",
+    "vue": "^3.3.4",
     "vue-email-editor": "^2.0.0",
+    "vue-server-renderer": "^2.7.14",
     "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
